@@ -855,10 +855,31 @@
 	            Dom.translate(component.view.g, offsetX, offsetY);
 	            offsetY += component.view.height + PH_HEIGHT;
 	        }
-			// Changed offsetY - PH_HEIGHT to 0: remove the join line of stop point
-	        JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
-			// Changed offsetY - PH_HEIGHT to 0: remove the extra palceholder on the top of stop point
-	        placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, 0));
+			console.log("new round");
+			console.log(components);
+			// empty canvas
+			if (components.length == 0) {
+				console.log("empty canvas");
+				JoinView.createStraightJoin(g, new Vector(maxJoinX, 0), PH_HEIGHT);
+				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, 0));
+			}
+			// If making a if/else block
+			components.forEach(c => {
+				console.log(c instanceof SwitchStepComponent);
+				if(c instanceof SwitchStepComponent){
+					console.log(placeholders);
+					console.log(c);
+					JoinView.createStraightJoin(g, new Vector(maxJoinX, 0), PH_HEIGHT);
+					placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2 - 2, 0));
+					if(placeholders.length >= 3){
+						placeholders.splice(2,1);
+					}
+				} else {
+					JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+					placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
+				}
+			});
+			
 	        return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
 	    }
 	    getClientPosition() {
@@ -1236,9 +1257,9 @@
 	            LabelView.create(g, offsetX + joinXs[i] + PADDING_X$1, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT, branchName, 'secondary');
 	            const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
 	            const fillingHeight = containerHeight - childEndY - CONNECTION_HEIGHT;
-	            if (fillingHeight > 0) {
-	                JoinView.createStraightJoin(g, new Vector(containerOffsets[i] + joinXs[i] + PADDING_X$1, childEndY), fillingHeight);
-	            }
+	            // if (fillingHeight > 0) {
+	            //     JoinView.createStraightJoin(g, new Vector(containerOffsets[i] + joinXs[i] + PADDING_X$1, childEndY), fillingHeight);
+	            // }
 	            const sequenceX = offsetX + PADDING_X$1 + Math.max((MIN_CHILDREN_WIDTH - sequence.view.width) / 2, 0);
 	            const sequenceY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT;
 	            Dom.translate(sequence.view.g, sequenceX, sequenceY);
@@ -1248,7 +1269,7 @@
 	        const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
 	        const inputView = InputView.createRectInput(g, containerWidths[0], 0, iconUrl);
 	        JoinView.createJoins(g, new Vector(containerWidths[0], PADDING_TOP + LABEL_HEIGHT), containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X$1, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT)));
-	        JoinView.createJoins(g, new Vector(containerWidths[0], containerHeight), containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X$1, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)));
+	        //JoinView.createJoins(g, new Vector(containerWidths[0], containerHeight), containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X$1, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)));
 	        const regionView = RegionView.create(g, containerWidths, containerHeight);
 	        const validationErrorView = ValidationErrorView.create(g, containersWidth, 0);
 	        return new SwitchStepComponentView(g, containersWidth, containerHeight, containerWidths[0], sequenceComponents, regionView, inputView, validationErrorView);
@@ -1309,6 +1330,7 @@
 	        }
 	        return null;
 	    }
+		// 添加branch上的placeholder
 	    getPlaceholders(result) {
 	        if (this.currentState !== StepComponentState.dragging) {
 	            this.view.sequenceComponents.forEach(sc => sc.getPlaceholders(result));
@@ -2041,6 +2063,7 @@
 	        return this.view.component.findById(stepId);
 	    }
 	    getPlaceholders(result) {
+			//console.log("length of start-stop component "+result.length);
 	        this.view.component.getPlaceholders(result);
 	    }
 	    setIsDragging(isDragging) {
