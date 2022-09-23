@@ -50,7 +50,7 @@
 	stroke: #E3E3E3;
 }
 .sqd-theme-light .sqd-join {
-	stroke: #000;
+	stroke: #a4a7aa;
 }
 
 /* light > .sqd-smart-editor */
@@ -101,10 +101,10 @@
 	stroke: #ED4800;
 }
 .sqd-theme-light .sqd-label-rect {
-	fill: #2411DB;
+	fill: #5296d5;
 }
 .sqd-theme-light .sqd-label-rect.sqd-label-secondary {
-	fill: #000;
+	fill: #46798f;
 }
 .sqd-theme-light .sqd-label-text {
 	fill: #FFF;
@@ -113,7 +113,7 @@
 /* light > .sqd-start-stop */
 
 .sqd-theme-light .sqd-start-stop {
-	fill: #2C18DF;
+	fill: #5296d5;
 }
 .sqd-theme-light .sqd-start-stop-icon {
 	fill: #FFF;
