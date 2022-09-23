@@ -14,7 +14,7 @@ function createIfStep(id, _true, _false) {
 		id,
 		componentType: 'switch',
 		type: 'if',
-		name: 'If',
+		name: 'If/Else',
 		branches: {
 			'true': _true,
 			'false': _false
@@ -24,15 +24,36 @@ function createIfStep(id, _true, _false) {
 }
 
 function toolboxGroup(name) {
-	return {
-		name,
-		steps: [
-			createTaskStep(null, 'save', 'Save file'),
-			createTaskStep(null, 'text', 'Send email'),
-			createTaskStep(null, 'task', 'Create task'),
-			createIfStep(null, [], [])
-		]
-	};
+	if (name == 'Trigger') {
+		return {
+			name,
+			steps: [
+				createTaskStep(null, 'text', 'Subscribe'),
+				createTaskStep(null, 'text', 'Unsubscribe'),
+				createTaskStep(null, 'task', 'Abandon'),
+				createTaskStep(null, 'task', 'Purchase'),
+				createTaskStep(null, 'task', 'Time Trigger')
+			]
+		};
+	} else if (name == 'Filter') {
+		return {
+			name,
+			steps: [
+				createIfStep(null, [], [])
+			]
+		};
+	} else {
+		return {
+			name,
+			steps: [
+				createTaskStep(null, 'text', 'Send Email'),
+				createTaskStep(null, 'task', 'Time Delay'),
+				createTaskStep(null, 'save', 'Add Tag'),
+				createTaskStep(null, 'save', 'Remove Tag')
+			]
+		};
+	}
+	
 }
 
 let designer;
@@ -40,9 +61,9 @@ const configuration = {
 	toolbox: {
 		isHidden: false,
 		groups: [
-			toolboxGroup('Main'),
-			toolboxGroup('File system'),
-			toolboxGroup('E-mail')
+			toolboxGroup('Trigger'),
+			toolboxGroup('Filter'),
+			toolboxGroup('Action')
 		]
 	},
 
