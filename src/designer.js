@@ -829,6 +829,27 @@
 				x2: start.x,
 				y2: start.y + height
 			});
+			const g = Dom.svg('g');
+			const circle = Dom.svg('circle', {
+				class: 'sqd-start-stop',
+				cx: SIZE / 2,
+				cy: SIZE / 2,
+				r: SIZE / 2
+			});
+			const stop = Dom.svg('rect', {
+				class: 'sqd-start-stop-icon',
+				x: start.x,
+				y: start.y + height,
+				width: SIZE * 0.5,
+				height: SIZE * 0.5,
+				rx: 4,
+				ry: 4
+			});
+			g.appendChild(circle);
+			g.appendChild(stop);
+			//Dom.translate(g, start.x, start.y + height);
+			join.appendChild(g);
+			//console.log(join);
 			parent.insertBefore(join, parent.firstChild);
 		}
 		static createJoins(parent, start, targets) {
@@ -848,6 +869,7 @@
 			}
 		}
 	}
+
 	function addStop(start) {
 		const s = SIZE * 0.5;
 		const m = (SIZE - s) / 2;
@@ -864,7 +886,7 @@
 			cy: SIZE / 2,
 			r: SIZE / 2
 		});
-		const g = Dom.svg('g');
+		const g = Dom.svg('g', {class: 'stop'});
 		g.appendChild(join);
 		g.appendChild(circle);
 
@@ -908,7 +930,7 @@
 				Dom.translate(component.view.g, offsetX, offsetY);
 				offsetY += component.view.height + PH_HEIGHT;
 			}
-
+			//console.log(parent);
 			// empty canvas
 			if (components.length == 0) {
 				// console.log('empty canvas');
@@ -916,33 +938,57 @@
 				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, 0));
 			}
 			// If making a if/else block
-			components.forEach(c => {
-				// console.log(c instanceof SwitchStepComponent);
-				// console.log('current length ' + placeholders.length);
-				if (c instanceof SwitchStepComponent) {
+			for (let i = 0; i < components.length; i++) {
+				if (components[i] instanceof SwitchStepComponent) {
 					JoinView.createStraightJoin(g, new Vector(maxJoinX, 0), PH_HEIGHT);
 					placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, 0));
-					// remove extra placeholders at last
+
+					// Remove extra placeholders at last
 					if (placeholders.length >= 3) {
-						// placeholders.splice(-1,components.length);
-						for (let i = 0; i < components.length; i++) {			
-							placeholders.splice(-1, 1);	
+						for (let k = 0; k < components.length; k++) {
+							placeholders.splice(-1, 1);
+						}
+					}
+
+					// Remove extra stop signs
+					for (let k = 0; k < i; k++) {
+						// console.log("removing ");
+						// console.log(i-k);
+						// console.log(document.getElementsByClassName('stop'));
+						let length = document.getElementsByClassName('stop').length;
+						document.getElementsByClassName('stop')[length - 1].parentNode.removeChild(document.getElementsByClassName('stop')[length - 1]);
+					}
+					
+					// Automatically move the block below if/else to the end of true branch
+					/* console.log(components[i].parentSequence[0]);
+					console.log(components);
+					let l = components.length;
+					if (components[i + 1]) {
+						// console.log(components[i+1].view.joinX);
+						// console.log(components[i+1].view.width);
+						for (let j = i + 1; j < l; j++) {
+							console.log(l - j);
+							console.log('block exists');
+							components[i].step.branches.true.push(components[j]);
+							components[i].parentSequence.splice(j, 1);
+							components.splice(j, 1);
 						}
 
-						// console.log(components.length);
-						// for (let i = -1; i < components.length; i++) {			
-						// 	console.log('remove ' + i + ' lines');
-						// 	g.removeChild(g.childNodes[g.children.length - 2]);
-						// }
-					}
+						//console.log(components[i].step.branches.true);
+						console.log(components[i].parentSequence);
+						console.log(components);
+						console.log(components[i].step.branches.true);
+					} */
 				} else {
 					JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), 0);
 					placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
-					//const stop = addStop(new Vector(maxJoinX - PH_WIDTH / 2, c.view.height - SIZE * 2));
-					//Dom.translate(stop, maxJoinX - PH_WIDTH / 6.8, offsetY - PH_HEIGHT / 4);
-					//g.appendChild(stop);
+					// add stop sign to task block
+					const stop = addStop(new Vector(maxJoinX - PH_WIDTH / 2, components[i].view.height - SIZE * 2));
+					// calculate location
+					Dom.translate(stop, maxJoinX - PH_WIDTH / 6.8, offsetY - PH_HEIGHT / 4);
+					g.appendChild(stop);
 				}
-			});
+			}
 
 			return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
 		}
@@ -1300,7 +1346,8 @@
 		}
 		static create(parent, step, configuration) {
 			const g = Dom.svg('g', {
-				class: `sqd-switch-group sqd-type-${step.type}`
+				class: `sqd-switch-group sqd-type-${step.type}`,
+				id: 'if'
 			});
 			parent.appendChild(g);
 			const branchNames = Object.keys(step.branches);
@@ -1732,6 +1779,9 @@
 			};
 		}
 		onMove(delta) {
+			//if (this.movingStepComponent instanceof SwitchStepComponent) {
+			//console.log(this.context);
+			//}
 			if (this.state) {
 				const newPosition = this.state.startPosition.subtract(delta).subtract(this.state.offset);
 				this.view.setPosition(newPosition);
@@ -1751,6 +1801,7 @@
 			if (!this.state) {
 				throw new Error('Invalid state');
 			}
+
 			this.state.finder.destroy();
 			this.state = undefined;
 			this.view.remove();
@@ -1777,6 +1828,22 @@
 					this.currentPlaceholder.setIsHover(false);
 				}
 			}
+
+			/*
+			if (this.context.selectedStep.componentType == "switch") {
+				console.log(this.context.selectedStep);
+				//console.log(this.context.provider);
+			}
+			console.log(this.context.provider);
+			const g = Dom.svg('g');
+			const stop = addStop(this.context.provider.context.viewPort.position);
+			g.appendChild(stop);
+			
+			Dom.translate(g, this.context.provider.context.viewPort.position.x, SIZE);
+			console.log(g);
+			this.context.provider.view.canvas.appendChild(g);
+*/
+
 			this.currentPlaceholder = undefined;
 		}
 	}
@@ -2083,6 +2150,7 @@
 			});
 		return result;
 	}
+
 	// start: start component
 	const SIZE = 30;
 	class StartComponentView {
@@ -2174,6 +2242,7 @@
 		}
 	}
 	// end: Start component
+
 	/* not used below
 	// start: Stop component
 	class StopComponentView {
