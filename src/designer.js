@@ -60,7 +60,7 @@
 				startPosition,
 				behavior
 			};
-			behavior.onStart(this.state.startPosition);
+			behavior.onStart(this.state.startPosition); // Step 4 add event listener
 			window.addEventListener('mousemove', this.onMouseMoveHandler, false);
 			window.addEventListener('touchmove', this.onTouchMoveHandler, false);
 			window.addEventListener('mouseup', this.onMouseUpHandler, false);
@@ -323,7 +323,11 @@
 		}
 		toggleIsSmartEditorCollapsed() {
 			this.isSmartEditorCollapsed = !this.isSmartEditorCollapsed;
+			console.log(326, this.isSmartEditorCollapsed)
 			this.onIsSmartEditorCollapsedChanged.forward(this.isSmartEditorCollapsed);
+		}
+		openSmartEditor() {
+			this.onIsSmartEditorCollapsedChanged.forward(false);
 		}
 		notifiyDefinitionChanged(rerender) {
 			this.onDefinitionChanged.forward({ rerender });
@@ -1547,7 +1551,7 @@
 		}
 		static create(parent, step, configuration) {
 			const g = Dom.svg('g', {
-				class: `sqd-task-group sqd-type-${step.type}`
+				class: `sqd-task-group sqd-type-${step.type}` // task item
 			});
 			parent.appendChild(g);
 			const boxHeight = ICON_SIZE + PADDING_Y * 2;
@@ -1571,6 +1575,7 @@
 			});
 			g.insertBefore(rect, text);
 			const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+			// add click event for icon
 			const icon = iconUrl
 				? Dom.svg('image', {
 						href: iconUrl
@@ -1586,6 +1591,9 @@
 				width: ICON_SIZE,
 				height: ICON_SIZE
 			});
+			icon.addEventListener('click', (e) => {
+
+			})
 			g.appendChild(icon);
 			const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
 			const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
@@ -1614,12 +1622,13 @@
 		}
 	}
 
-	class TaskStepComponent {
+	class TaskStepComponent { // take one Subscribe as example
 		constructor(view, step, parentSequence, configuration) {
 			this.view = view;
 			this.step = step;
 			this.parentSequence = parentSequence;
 			this.configuration = configuration;
+			console.log(1630, configuration);
 		}
 		static create(parent, step, parentSequence, configuration) {
 			const view = TaskStepComponentView.create(parent, step, configuration);
@@ -1662,6 +1671,7 @@
 
 	class StepComponentFactory {
 		static create(parent, step, parentSequence, configuration) {
+			console.log(step.componentType);
 			switch (step.componentType) {
 				case ComponentType.task:
 					return TaskStepComponent.create(parent, step, parentSequence, configuration);
@@ -2108,6 +2118,8 @@
 		}
 		onStart() {
 			// Nothing to do.
+			console.log(2121)
+			this.context.openSmartEditor()
 		}
 		onMove(delta) {
 			if (!this.context.isReadonly && delta.distance() > 2) {
@@ -2303,8 +2315,9 @@
 	const GRID_SIZE = 48;
 	let lastGridPatternId = 0;
 	class WorkspaceView {
-		constructor(workspace, canvas, gridPattern, gridPatternPath, foreground, configuration) {
+		constructor(context, workspace, canvas, gridPattern, gridPatternPath, foreground, configuration) {
 			this.workspace = workspace;
+			this.context = context;
 			this.canvas = canvas;
 			this.gridPattern = gridPattern;
 			this.gridPatternPath = gridPatternPath;
@@ -2312,7 +2325,7 @@
 			this.configuration = configuration;
 			this.onResizeHandler = () => this.onResize();
 		}
-		static create(parent, configuration) {
+		static create(context, parent, configuration) {
 			const defs = Dom.svg('defs');
 			const gridPatternId = 'sqd-grid-pattern-' + lastGridPatternId++;
 			const gridPattern = Dom.svg('pattern', {
@@ -2343,7 +2356,7 @@
 			canvas.appendChild(foreground);
 			workspace.appendChild(canvas);
 			parent.appendChild(workspace);
-			const view = new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, configuration);
+			const view = new WorkspaceView(context, workspace, canvas, gridPattern, gridPatternPath, foreground, configuration);
 			window.addEventListener('resize', view.onResizeHandler, false);
 			return view;
 		}
@@ -2420,7 +2433,7 @@
 			this.selectedStepComponent = null;
 		}
 		static create(parent, context) {
-			const view = WorkspaceView.create(parent, context.configuration.steps);
+			const view = WorkspaceView.create(context, parent, context.configuration.steps);
 			const workspace = new Workspace(view, context);
 			setTimeout(() => {
 				workspace.render();
@@ -2442,7 +2455,7 @@
 					workspace.onSelectedStepChanged(selectedStep);
 				}
 			});
-			view.bindMouseDown((p, t, b) => workspace.onMouseDown(p, t, b));
+			view.bindMouseDown((p, t, b) => workspace.onMouseDown(p, t, b)); // step 1
 			view.bindTouchStart(e => workspace.onTouchStart(e));
 			view.bindContextMenu(e => workspace.onContextMenu(e));
 			view.bindWheel(e => workspace.onWheel(e));
@@ -2497,7 +2510,7 @@
 		revalidate() {
 			this.isValid = this.getRootComponent().validate();
 		}
-		onMouseDown(position, target, button) {
+		onMouseDown(position, target, button) { // step 2
 			const isPrimaryButton = button === 0;
 			const isMiddleButton = button === 1;
 			if (isPrimaryButton || isMiddleButton) {
@@ -2516,7 +2529,8 @@
 		startBehavior(target, position, forceMoveMode) {
 			const clickedStep = !forceMoveMode && !this.context.isMoveModeEnabled ? this.getRootComponent().findByElement(target) : null;
 			if (clickedStep) {
-				this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
+				// Step 3
+				this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context)); // chekc this bahavior
 			} else {
 				this.context.behaviorController.start(position, MoveViewPortBehavior.create(this.context));
 			}
@@ -2542,9 +2556,13 @@
 			this.view.setPositionAndScale(viewPort.position, viewPort.scale);
 		}
 		onSelectedStepChanged(step) {
+			console.log(2548, step) // Step 4
 			this.trySelectStep(step);
 		}
 		trySelectStep(step) {
+			// step; clicked item
+			// this.selectedStepComponent; one step behind
+			console.log(2552, step, this.selectedStepComponent)
 			if (this.selectedStepComponent) {
 				this.selectedStepComponent.setState(StepComponentState.default);
 				this.selectedStepComponent = null;
@@ -2690,7 +2708,7 @@
 			const behaviorController = new BehaviorController();
 			const layoutController = new LayoutController(parent);
 			const isMobile = layoutController.isMobile();
-			const context = new DesignerContext(definition, behaviorController, layoutController, configuration, isMobile, isMobile);
+			const context = new DesignerContext(definition, behaviorController, layoutController, configuration, isMobile, true);
 			const view = DesignerView.create(parent, context, configuration);
 			const designer = new Designer(view, context);
 			view.bindKeyUp(e => designer.onKeyUp(e));
