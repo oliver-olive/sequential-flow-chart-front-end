@@ -805,8 +805,6 @@
 		ComponentType['task'] = 'task';
 		ComponentType['switch'] = 'switch';
 		ComponentType['container'] = 'container';
-		// add stop component type
-		ComponentType['stop'] = 'stop';
 	})(ComponentType || (ComponentType = {}));
 
 	class SequencePlaceholder {
@@ -870,6 +868,7 @@
 		}
 	}
 
+	// Separate from start component
 	function addStop(start) {
 		const s = SIZE * 0.5;
 		const m = (SIZE - s) / 2;
@@ -918,27 +917,28 @@
 			const g = Dom.svg('g');
 			parent.appendChild(g);
 			const components = sequence.map(s => StepComponentFactory.create(g, s, sequence, configuration));
-			const maxJoinX = components.length > 0 ? Math.max(...components.map(c => c.view.joinX)) : PH_WIDTH / 2;
-			const maxWidth = components.length > 0 ? Math.max(...components.map(c => c.view.width)) : PH_WIDTH;
+			let maxJoinX = components.length > 0 ? Math.max(...components.map(c => c.view.joinX)) : PH_WIDTH / 2;
+			let maxWidth = components.length > 0 ? Math.max(...components.map(c => c.view.width)) : PH_WIDTH;
 			let offsetY = PH_HEIGHT;
 			const placeholders = [];
-			for (let i = 0; i < components.length; i++) {
-				const component = components[i];
-				const offsetX = maxJoinX - component.view.joinX;
-				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
-				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
-				Dom.translate(component.view.g, offsetX, offsetY);
-				offsetY += component.view.height + PH_HEIGHT;
-			}
-			//console.log(parent);
+
 			// empty canvas
 			if (components.length == 0) {
-				// console.log('empty canvas');
-				// JoinView.createStraightJoin(g, new Vector(maxJoinX, 0), PH_HEIGHT);
 				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, 0));
 			}
+
+			// Adding lines, placeholders, and stop points
+			for (let i = 0; i < components.length; i++) {
+				const offsetX = maxJoinX - components[i].view.joinX;
+				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
+				Dom.translate(components[i].view.g, offsetX, offsetY);
+				offsetY += components[i].view.height + PH_HEIGHT;
+			}			
+			
 			// If making a if/else block
 			for (let i = 0; i < components.length; i++) {
+				
 				if (components[i] instanceof SwitchStepComponent) {
 					JoinView.createStraightJoin(g, new Vector(maxJoinX, 0), PH_HEIGHT);
 					placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, 0));
@@ -950,41 +950,31 @@
 						}
 					}
 
-					// Remove extra stop signs
+					 // Remove extra stop signs
 					for (let k = 0; k < i; k++) {
-						// console.log("removing ");
-						// console.log(i-k);
-						// console.log(document.getElementsByClassName('stop'));
 						let length = document.getElementsByClassName('stop').length;
 						document.getElementsByClassName('stop')[length - 1].parentNode.removeChild(document.getElementsByClassName('stop')[length - 1]);
 					}
-					
-					// Automatically move the block below if/else to the end of true branch
-					/* console.log(components[i].parentSequence[0]);
-					console.log(components);
-					let l = components.length;
-					if (components[i + 1]) {
-						// console.log(components[i+1].view.joinX);
-						// console.log(components[i+1].view.width);
-						for (let j = i + 1; j < l; j++) {
-							console.log(l - j);
-							console.log('block exists');
-							components[i].step.branches.true.push(components[j]);
-							components[i].parentSequence.splice(j, 1);
-							components.splice(j, 1);
-						}
 
-						//console.log(components[i].step.branches.true);
-						console.log(components[i].parentSequence);
-						console.log(components);
-						console.log(components[i].step.branches.true);
-					} */
-				} else {
+					
+					// If there is one or more blocks below if/else,
+					// move them to the end of true branch
+					while (components[i+1]) {
+						// Move every block to true branch
+						components[i].step.branches.true.push(components[i].parentSequence[i+1]);
+			
+						// Remove from parent sequence of if/else & components
+						components[i].parentSequence.splice(i+1,1);
+						components.splice(i+1, 1);
+					}
+				} 
+				// If making a task block
+				else {
 					JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), 0);
 					placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
-					// add stop sign to task block
+					// Add stop sign to task block
 					const stop = addStop(new Vector(maxJoinX - PH_WIDTH / 2, components[i].view.height - SIZE * 2));
-					// calculate location
+					// Calculate location
 					Dom.translate(stop, maxJoinX - PH_WIDTH / 6.8, offsetY - PH_HEIGHT / 4);
 					g.appendChild(stop);
 				}
@@ -1779,9 +1769,6 @@
 			};
 		}
 		onMove(delta) {
-			//if (this.movingStepComponent instanceof SwitchStepComponent) {
-			//console.log(this.context);
-			//}
 			if (this.state) {
 				const newPosition = this.state.startPosition.subtract(delta).subtract(this.state.offset);
 				this.view.setPosition(newPosition);
@@ -1810,6 +1797,7 @@
 
 			if (!interrupt && this.currentPlaceholder) {
 				if (this.movingStepComponent) {
+					
 					modified = this.context.tryMoveStep(
 						this.movingStepComponent.parentSequence,
 						this.movingStepComponent.step,
@@ -1828,34 +1816,19 @@
 					this.currentPlaceholder.setIsHover(false);
 				}
 			}
-
-			/*
-			if (this.context.selectedStep.componentType == "switch") {
-				console.log(this.context.selectedStep);
-				//console.log(this.context.provider);
-			}
-			console.log(this.context.provider);
-			const g = Dom.svg('g');
-			const stop = addStop(this.context.provider.context.viewPort.position);
-			g.appendChild(stop);
-			
-			Dom.translate(g, this.context.provider.context.viewPort.position.x, SIZE);
-			console.log(g);
-			this.context.provider.view.canvas.appendChild(g);
-*/
-
 			this.currentPlaceholder = undefined;
+
+			// Reloading 
+			console.log(this.context);
+			for (let component of this.context.definition.sequence) {
+				if (component.componentType == "switch") {
+					console.log("reloading");
+					this.context.provider.render();
+				}
+			}
 		}
 	}
-	/* not used
-	// DFS to find all the way down & add a stop component
-	function addStop(stop, component) {
-		// base case: not a switch component || one of the branch has no component 
-		if (component instanceof TaskComponent) {
-			
-		}
-	}
-*/
+	
 	const regexp = /^[a-zA-Z][a-zA-Z0-9_-]+$/;
 	class TypeValidator {
 		static validate(type) {
@@ -2107,7 +2080,7 @@
 			return new SelectStepBehavior(pressedStepComponent, context);
 		}
 		onStart() {
-			// Nothing to do.
+			// Nothing to do.	
 		}
 		onMove(delta) {
 			if (!this.context.isReadonly && delta.distance() > 2) {
