@@ -6,7 +6,7 @@
 		: ((global = typeof globalThis !== 'undefined' ? globalThis : global || self), (global.sequentialWorkflowDesigner = factory()));
 })(this, function () {
 	'use strict';
-
+	//this is  a vector
 	class Vector {
 		constructor(x, y) {
 			this.x = x;
