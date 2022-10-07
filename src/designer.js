@@ -322,8 +322,6 @@
 			this.onIsToolboxCollapsedChanged.forward(this.isToolboxCollapsed);
 		}
 		toggleIsSmartEditorCollapsed() {
-			this.isSmartEditorCollapsed = !this.isSmartEditorCollapsed;
-			console.log(326, this.isSmartEditorCollapsed)
 			this.onIsSmartEditorCollapsedChanged.forward(this.isSmartEditorCollapsed);
 		}
 		openSmartEditor() {
@@ -1539,7 +1537,10 @@
 	const ICON_SIZE = 22;
 	const RECT_RADIUS = 5;
 	class TaskStepComponentView {
-		constructor(g, width, height, joinX, rect, inputView, outputView, validationErrorView) {
+		constructor(g, width, height, joinX, rect, inputView, outputView, validationErrorView, icon1, icon2, icon3) {
+			this.icon1 = icon1;
+			this.icon2 = icon2;
+			this.icon3 = icon3;
 			this.g = g;
 			this.width = width;
 			this.height = height;
@@ -1563,7 +1564,7 @@
 			text.textContent = step.name;
 			g.appendChild(text);
 			const textWidth = Math.max(text.getBBox().width, MIN_TEXT_WIDTH);
-			const boxWidth = ICON_SIZE + PADDING_X * 3 + textWidth;
+			const boxWidth =  2 * ICON_SIZE + 3 * PADDING_X  + textWidth;
 			const rect = Dom.svg('rect', {
 				x: 0.5,
 				y: 0.5,
@@ -1574,6 +1575,26 @@
 				ry: RECT_RADIUS
 			});
 			g.insertBefore(rect, text);
+			const text1 = Dom.svg('text', {
+				x: ICON_SIZE + PADDING_X * 2,
+				y: boxHeight / 2,
+				class: 'sqd-task-text'
+			});
+			text1.textContent = "Select List"
+			const text2 = "Run";
+			
+			const rect1 = Dom.svg('rect', {
+				x: 0.5,
+				y: boxHeight,
+				class: 'sqd-task-rect',
+				width: boxWidth,
+				height: 2 * boxHeight,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			Dom.attrs(rect1, {
+				class: "sqd-hidden"
+			});
 			const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
 			// add click event for icon
 			const icon = iconUrl
@@ -1591,14 +1612,90 @@
 				width: ICON_SIZE,
 				height: ICON_SIZE
 			});
-			icon.addEventListener('click', (e) => {
-
-			})
+			const moreUrl = './assets/more.svg';
+			const moreIcon = moreUrl
+			 	? Dom.svg('image', {
+			 		href: moreUrl,
+		  	 	})
+			 	: Dom.svg('rect', {
+			 			class: 'sqd-task-empty-icon',
+			 			rx: 4,
+			 			ry: 4
+		  	 	});
+				 Dom.attrs(moreIcon, {
+					class: "more",
+					id: 'colorbox',
+					x: ICON_SIZE + 3 * PADDING_X + textWidth - 10,
+					y: PADDING_Y,
+					width: ICON_SIZE,
+					height: ICON_SIZE
+				 });
+			 	const iconUrl1 = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+			// // add click event for icon
+			 	const icon1 = iconUrl1
+			 	? Dom.svg('image', {
+			 			href: iconUrl
+			 	  })
+			 	: Dom.svg('rect', {
+			 			class: 'sqd-task-empty-icon',
+			 			rx: 4,
+		 			ry: 4
+			 	  });
+			 Dom.attrs(icon1, {
+			 	class: "moreicon sqd-hidden",
+			 	x: ICON_SIZE + 3 * PADDING_X + textWidth + 44,
+			 	y: PADDING_Y,
+			 	width: ICON_SIZE,
+			 	height: ICON_SIZE
+			 });
+			const iconUrl2 = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+			// add click event for icon
+			const icon2 = iconUrl2
+				? Dom.svg('image', {
+						href: iconUrl
+				  })
+				: Dom.svg('rect', {
+						class: 'sqd-task-empty-icon',
+						rx: 4,
+						ry: 4
+				  });
+			Dom.attrs(icon2, {
+				class: "moreicon sqd-hidden",
+				x: ICON_SIZE + 3 * PADDING_X + textWidth + 22,
+				y: PADDING_Y + 22,
+				width: ICON_SIZE,
+				height: ICON_SIZE
+			});
+			const iconUrl3 = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+			// add click event for icon
+			const icon3 = iconUrl3
+				? Dom.svg('image', {
+						href: iconUrl
+				  })
+				: Dom.svg('rect', {
+						class: 'sqd-task-empty-icon',
+						rx: 4,
+						ry: 4
+				  });
+			Dom.attrs(icon3, {
+				class: "moreicon sqd-hidden",
+				x: ICON_SIZE + 3 * PADDING_X + textWidth + 22,
+				y: PADDING_Y - 22,
+				width: ICON_SIZE,
+				height: ICON_SIZE
+			});
 			g.appendChild(icon);
+			g.appendChild(moreIcon);
+			//g.appendChild(moreUrl);
+			//g.appendChild(moreButton);
+			g.appendChild(icon1);
+			g.appendChild(icon2);
+			g.appendChild(icon3);
+			g.appendChild(rect1);
 			const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
 			const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
 			const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
-			return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, inputView, outputView, validationErrorView);
+			return new TaskStepComponentView(g, boxWidth, boxHeight, boxWidth / 2, rect, inputView, outputView, validationErrorView, icon1, icon2, icon3);
 		}
 		getClientPosition() {
 			const rect = this.rect.getBoundingClientRect();
@@ -1621,14 +1718,12 @@
 			this.validationErrorView.setIsHidden(isValid);
 		}
 	}
-
 	class TaskStepComponent { // take one Subscribe as example
 		constructor(view, step, parentSequence, configuration) {
 			this.view = view;
 			this.step = step;
 			this.parentSequence = parentSequence;
 			this.configuration = configuration;
-			console.log(1630, configuration);
 		}
 		static create(parent, step, parentSequence, configuration) {
 			const view = TaskStepComponentView.create(parent, step, configuration);
@@ -1671,7 +1766,6 @@
 
 	class StepComponentFactory {
 		static create(parent, step, parentSequence, configuration) {
-			console.log(step.componentType);
 			switch (step.componentType) {
 				case ComponentType.task:
 					return TaskStepComponent.create(parent, step, parentSequence, configuration);
@@ -2098,6 +2192,10 @@
 		}
 		onStart() {
 			this.context.setSelectedStep(null);
+			//Dom.toggleClass(this.pressedStepComponent.view.icon2, this.context.isToolboxCollapsed, 'sqd-hidden');
+			//Dom.toggleClass(this.pressedStepComponent.view.icon3, this.context.isToolboxCollapsed, 'sqd-hidden');
+			
+			console.log(2258, this.context)
 		}
 		onMove(delta) {
 			const newPosition = this.startPosition.subtract(delta);
@@ -2118,8 +2216,12 @@
 		}
 		onStart() {
 			// Nothing to do.
-			console.log(2121)
-			this.context.openSmartEditor()
+			//console.log(2121, this.context);
+			this.context.openSmartEditor();
+			//
+			//Dom.toggleClass(this.pressedStepComponent.view.icon2, this.context.isToolboxCollapsed, 'sqd-hidden');
+			//Dom.toggleClass(this.pressedStepComponent.view.icon3, this.context.isToolboxCollapsed, 'sqd-hidden');
+			
 		}
 		onMove(delta) {
 			if (!this.context.isReadonly && delta.distance() > 2) {
@@ -2528,11 +2630,32 @@
 		}
 		startBehavior(target, position, forceMoveMode) {
 			const clickedStep = !forceMoveMode && !this.context.isMoveModeEnabled ? this.getRootComponent().findByElement(target) : null;
+			//console.log(2707, target);
 			if (clickedStep) {
 				// Step 3
+				var but = document.querySelector(".more")
+				console.log(2702, this.getRootComponent().findByElement(target).view.g.querySelector(".more"))
+				const but1 = this.getRootComponent().findByElement(target).view.g.querySelector(".more")
+
+				if (but){
+					but.addEventListener("click", clickedStep.view.icon1.classList.remove("sqd-hidden"));
+					but.addEventListener("click", clickedStep.view.icon2.classList.remove("sqd-hidden"));
+					but.addEventListener("click", clickedStep.view.icon3.classList.remove("sqd-hidden"));
+					//console.log(2284, this.pressedStepComponent)
+				}else{
+					var but = document.querySelectorAll(".moreicon");
+					but.forEach((e) =>e.classList.add("sqd-hidden"));
+
+				}
 				this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context)); // chekc this bahavior
+				
 			} else {
+				//console.log(2706, this.context)
 				this.context.behaviorController.start(position, MoveViewPortBehavior.create(this.context));
+				var but = document.querySelectorAll(".moreicon");
+				but.forEach((e) =>e.classList.add("sqd-hidden"));
+				console.log(2709, but)
+				//but.addEventListener("click", clickedStep.view.icon1.classList.add("sqd-hidden"));
 			}
 		}
 		onWheel(e) {
@@ -2556,15 +2679,20 @@
 			this.view.setPositionAndScale(viewPort.position, viewPort.scale);
 		}
 		onSelectedStepChanged(step) {
-			console.log(2548, step) // Step 4
+			//console.log(2548, step) // Step 4
 			this.trySelectStep(step);
 		}
 		trySelectStep(step) {
 			// step; clicked item
 			// this.selectedStepComponent; one step behind
-			console.log(2552, step, this.selectedStepComponent)
+
+			var but = document.querySelectorAll(".moreicon");
+			//this.selectedStepComponent
 			if (this.selectedStepComponent) {
 				this.selectedStepComponent.setState(StepComponentState.default);
+				this.selectedStepComponent.view.icon1.classList.add("sqd-hidden")
+				this.selectedStepComponent.view.icon2.classList.add("sqd-hidden")
+				this.selectedStepComponent.view.icon3.classList.add("sqd-hidden")
 				this.selectedStepComponent = null;
 			}
 			if (step) {
@@ -2573,6 +2701,16 @@
 					throw new Error(`Cannot find a step component by id ${step.id}`);
 				}
 				this.selectedStepComponent.setState(StepComponentState.selected);
+				const clickedStep = !this.context.isMoveModeEnabled ? this.getRootComponent().findByElement(this.position) : null;
+				if(clickedStep) {
+					this.selectedStepComponent.view.icon1.classList.remove("sqd-hidden")
+					this.selectedStepComponent.view.icon2.classList.remove("sqd-hidden")
+					this.selectedStepComponent.view.icon3.classList.remove("sqd-hidden")
+				//	but.addEventListener("click", clickedStep);
+				//	but.addEventListener("click", clickedStep.view.icon2.classList.remove("sqd-hidden"));
+				//	but.addEventListener("click", clickedStep.view.icon3.classList.remove("sqd-hidden"));
+				console.log(2774, this.selectedStepComponent)
+				}
 			}
 		}
 		getRootComponent() {
