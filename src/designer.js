@@ -189,12 +189,35 @@
 		static insertStep(step, targetSequence, targetIndex) {
 			targetSequence.splice(targetIndex, 0, step);
 		}
-		static deleteStep(step, parentSequence) {
-			const index = parentSequence.indexOf(step);
-			if (index < 0) {
-				throw new Error('Unknown step');
+		// deleteStep is modiefied
+		static deleteStep(step, parentSequence, choice) {
+			console.log("In Sequence Modifier");
+			//console.log(typeof(choice));
+			//console.log(parentSequence);
+			
+			// If deleting true branch, keep blocks in false
+			if (choice == "0" && step.branches.false.length > 0){
+				console.log("delete true");
+				for (let i = 0; i < step.branches.false.length; i++) {
+					parentSequence.push(step.branches.false[i]);
+				}
+			} 
+			// If deleting false branch, keep blocks in true
+			else if (choice == "1" && step.branches.true.length > 0) {
+				console.log("delete false");
+				for (let i = 0; i < step.branches.true.length; i++) {
+					parentSequence.push(step.branches.true[i]);
+				}
+			} 
+			
+			if (choice != null) {
+				const index = parentSequence.indexOf(step);
+				if (index < 0) {
+					throw new Error('Unknown step');
+				}
+				parentSequence.splice(index, 1);
 			}
-			parentSequence.splice(index, 1);
+			
 		}
 	}
 
@@ -289,7 +312,7 @@
 			this.setSelectedStep(step);
 			return true;
 		}
-		tryDeleteStep(step) {
+		tryDeleteStep(step, choice) {
 			var _a;
 			const component = this.getProvider().getComponentByStepId(step.id);
 			const canDeleteStep = this.configuration.steps.canDeleteStep
@@ -297,13 +320,25 @@
 				: true;
 			if (!canDeleteStep) {
 				return false;
+				//return null;
 			}
-			SequenceModifier.deleteStep(component.step, component.parentSequence);
+			// Modified: if try to delete an if/else block, prompt user choice
+			if (component.step.componentType == 'switch'){
+				console.log("delete a switch blocks");
+				SequenceModifier.deleteStep(component.step, component.parentSequence, choice);
+			} else {
+				SequenceModifier.deleteStep(component.step, component.parentSequence, 2);
+			} 
+			//const index = component.parentSequence.indexOf(this.selectedStep);
 			this.notifiyDefinitionChanged(true);
 			if (((_a = this.selectedStep) === null || _a === void 0 ? void 0 : _a.id) === step.id) {
+				//console.log("mysterious condition");
 				this.setSelectedStep(null);
-			}
+			} 
+			
 			return true;
+			
+			//return [index,component.parentSequence];
 		}
 		setIsReadonly(isReadonly) {
 			this.isReadonly = isReadonly;
@@ -474,6 +509,69 @@
 		return button;
 	}
 
+	async function promptChoices(context){
+		//console.log(controller);
+		const toDelete = ['Delete true path', 'Delte false path', 'Delte both'];
+		let output = null;
+		// Create a propmt window
+		const dialogBox = Dom.element('dialog',{
+			id: 'dialog-box'
+		});
+
+		// Top-right close button
+
+		// A form to include all choices
+		const form = Dom.element('form', {
+			method: 'dialog',
+			id: 'dialog-form'
+		});
+		const wrapper = Dom.element('fieldset', {
+			id: 'dialog-form-options'
+		})
+		for (let i = 0; i < 3; i++) {
+			const radio = Dom.element('input', {
+				type: 'radio',
+				name: 'choice',
+				value: i
+			});
+			
+			const choice = Dom.element('label');
+			choice.innerText = toDelete[i];
+
+			wrapper.appendChild(radio);
+			wrapper.appendChild(choice);
+			choice.insertAdjacentHTML("afterend", "</br>");
+		}
+		form.appendChild(wrapper);
+	
+		const btn1 = Dom.element('button',{
+			type: 'submit'
+		});
+		btn1.innerText = 'Click to delete';
+		form.appendChild(btn1);
+		dialogBox.appendChild(form);
+	
+
+		context.layoutController.parent.appendChild(dialogBox);
+		//console.log(dialogBox);
+		if (typeof dialogBox.showModal === "function") {
+			dialogBox.showModal();
+		} else {
+			prompt("Wow from prompt window", 'ok');
+		}
+
+		dialogBox.addEventListener('close', () => {
+			//console.log("close window triggered");
+			var elem = document.getElementsByTagName('input');
+			for (let i = 0; i < elem.length; i++){
+				if (elem[i].type == 'radio' && elem[i].checked) {
+					output = elem[i].value;	
+				}
+			}
+			context.tryDeleteStep(context.selectedStep, output);
+		});
+	}
+
 	class ControlBar {
 		constructor(view, context) {
 			this.view = view;
@@ -509,7 +607,12 @@
 		}
 		onDeleteButtonClicked() {
 			if (this.context.selectedStep) {
-				this.context.tryDeleteStep(this.context.selectedStep);
+				if (this.context.selectedStep.componentType == 'switch'){
+					promptChoices(this.context);
+				}
+				else {
+					this.context.tryDeleteStep(this.context.selectedStep, 2);
+				}
 			}
 		}
 		onIsReadonlyChanged() {
@@ -955,7 +1058,6 @@
 						let length = document.getElementsByClassName('stop').length;
 						document.getElementsByClassName('stop')[length - 1].parentNode.removeChild(document.getElementsByClassName('stop')[length - 1]);
 					}
-
 					
 					// If there is one or more blocks below if/else,
 					// move them to the end of true branch
@@ -1457,13 +1559,15 @@
 			}
 			return null;
 		}
-		// 添加branch上的placeholder
+		// Add placeholders to branches
 		getPlaceholders(result) {
 			if (this.currentState !== StepComponentState.dragging) {
 				this.view.sequenceComponents.forEach(sc => sc.getPlaceholders(result));
 			}
 		}
 		setIsDragging(isDragging) {
+			// console.log('a switch block is dragged');
+			// isDragging = false;
 			if (this.currentState !== StepComponentState.dragging) {
 				this.view.sequenceComponents.forEach(s => s.setIsDragging(isDragging));
 			}
@@ -1471,16 +1575,20 @@
 		}
 		setState(state) {
 			this.currentState = state;
+			
 			switch (state) {
 				case StepComponentState.default:
+					
 					this.view.setIsSelected(false);
 					this.view.setIsDisabled(false);
 					break;
 				case StepComponentState.selected:
+					
 					this.view.setIsSelected(true);
 					this.view.setIsDisabled(false);
 					break;
 				case StepComponentState.dragging:
+					//console.log(StepComponentState.dragging);
 					this.view.setIsSelected(false);
 					this.view.setIsDisabled(true);
 					break;
@@ -1753,6 +1861,7 @@
 		}
 		onStart(position) {
 			let offset;
+			//console.log(this.movingStepComponent);
 			if (this.movingStepComponent) {
 				this.movingStepComponent.setState(StepComponentState.dragging);
 				const clientPosition = this.movingStepComponent.view.getClientPosition();
@@ -1760,6 +1869,7 @@
 			} else {
 				offset = new Vector(this.view.width / 2, this.view.height / 2);
 			}
+			
 			this.view.setPosition(position.subtract(offset));
 			this.context.setIsDragging(true);
 			this.state = {
@@ -1767,6 +1877,8 @@
 				finder: PlaceholderFinder.create(this.context.getPlaceholders(), this.context),
 				offset
 			};
+			//console.log(this.state);
+
 		}
 		onMove(delta) {
 			if (this.state) {
@@ -1818,11 +1930,9 @@
 			}
 			this.currentPlaceholder = undefined;
 
-			// Reloading 
-			console.log(this.context);
+			// Reload page 
 			for (let component of this.context.definition.sequence) {
 				if (component.componentType == "switch") {
-					console.log("reloading");
 					this.context.provider.render();
 				}
 			}
@@ -2051,6 +2161,7 @@
 		}
 	}
 
+	// Move canvas
 	class MoveViewPortBehavior {
 		constructor(startPosition, context) {
 			this.startPosition = startPosition;
@@ -2071,6 +2182,7 @@
 		}
 	}
 
+	// When a block is selected
 	class SelectStepBehavior {
 		constructor(pressedStepComponent, context) {
 			this.pressedStepComponent = pressedStepComponent;
@@ -2083,7 +2195,12 @@
 			// Nothing to do.	
 		}
 		onMove(delta) {
-			if (!this.context.isReadonly && delta.distance() > 2) {
+			// Modified: if/else block can't be moved
+			if (this.pressedStepComponent instanceof SwitchStepComponent){
+				console.log("if/else is selected but can't be moved");
+				return this;
+			}
+			else if (!this.context.isReadonly && delta.distance() > 2) {
 				this.context.setSelectedStep(null);
 				return DragStepBehavior.create(this.context, this.pressedStepComponent.step, this.pressedStepComponent);
 			}
@@ -2320,7 +2437,7 @@
 			window.addEventListener('resize', view.onResizeHandler, false);
 			return view;
 		}
-		// Create Start points
+		// Render whole page
 		render(sequence) {
 			if (this.rootComponent) {
 				this.rootComponent.view.destroy();
@@ -2488,8 +2605,10 @@
 		}
 		startBehavior(target, position, forceMoveMode) {
 			const clickedStep = !forceMoveMode && !this.context.isMoveModeEnabled ? this.getRootComponent().findByElement(target) : null;
+			//console.log(clickedStep);
 			if (clickedStep) {
 				this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
+				
 			} else {
 				this.context.behaviorController.start(position, MoveViewPortBehavior.create(this.context));
 			}
@@ -2712,7 +2831,15 @@
 			}
 			e.preventDefault();
 			e.stopPropagation();
-			this.context.tryDeleteStep(this.context.selectedStep);
+			console.log("delete from keyup");
+			/* const c = promtChoices(this.context);
+			this.context.tryDeleteStep(this.context.selectedStep, c); */
+			let arr = this.context.tryDeleteStep(this.context.selectedStep);
+			if (arr[0].componentType == 'switch'){
+				promptChoices(this.context, arr[0], arr[1]); 
+			} else {
+				SequenceModifier.deleteStep(arr[0], arr[1], 2); 
+			}
 		}
 	}
 	Designer.utils = Utils;
