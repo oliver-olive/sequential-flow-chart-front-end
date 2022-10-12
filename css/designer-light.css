@@ -122,13 +122,13 @@
 /* light > .sqd-placeholder */
 
 .sqd-theme-light .sqd-placeholder {
-	fill: #D8D8D8;
-	stroke: #6A6A6A;
+	fill: #5495d4;
+	stroke: #FFF;
 }
-.sqd-theme-light .sqd-placeholder.sqd-hover {
-	fill: #ED4800;
+.sqd-placeholder-icon{
+	stroke: #fff;
+	/* stroke-width: 2; */
 }
-
 .sqd-theme-light .sqd-validation-error {
 	fill: #FFA200;
 }
