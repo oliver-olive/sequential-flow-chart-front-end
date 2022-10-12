@@ -509,7 +509,7 @@
 		return button;
 	}
 
-	async function promptChoices(context){
+	function promptChoices(context){
 		//console.log(controller);
 		const toDelete = ['Delete true path', 'Delte false path', 'Delte both'];
 		let output = null;
@@ -917,6 +917,7 @@
 			this.index = index;
 		}
 		setIsHover(isHover) {
+			//console.log(this.element);
 			Dom.toggleClass(this.element, isHover, 'sqd-hover');
 		}
 	}
@@ -972,16 +973,10 @@
 	}
 
 	// Separate from start component
-	function addStop(start) {
+	function addStop() {
 		const s = SIZE * 0.5;
 		const m = (SIZE - s) / 2;
-		const join = Dom.svg('line', {
-			class: 'sqd-join',
-			x1: start.x,
-			y1: start.y,
-			x2: start.x,
-			y2: start.y + 24
-		});
+
 		const circle = Dom.svg('circle', {
 			class: 'sqd-start-stop',
 			cx: SIZE / 2,
@@ -989,7 +984,6 @@
 			r: SIZE / 2
 		});
 		const g = Dom.svg('g', {class: 'stop'});
-		g.appendChild(join);
 		g.appendChild(circle);
 
 		const stop = Dom.svg('rect', {
@@ -1025,12 +1019,12 @@
 			let offsetY = PH_HEIGHT;
 			const placeholders = [];
 
-			// empty canvas
+			// Empty canvas
 			if (components.length == 0) {
 				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, 0));
 			}
 
-			// Adding lines, placeholders, and stop points
+			// Adding lines, placeholders, and stop points on TOP of components
 			for (let i = 0; i < components.length; i++) {
 				const offsetX = maxJoinX - components[i].view.joinX;
 				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
@@ -1039,25 +1033,12 @@
 				offsetY += components[i].view.height + PH_HEIGHT;
 			}			
 			
-			// If making a if/else block
-			for (let i = 0; i < components.length; i++) {
+			// Modify switch components
+			let i = 0;
+			for (i; i < components.length; i++) {
 				
 				if (components[i] instanceof SwitchStepComponent) {
 					JoinView.createStraightJoin(g, new Vector(maxJoinX, 0), PH_HEIGHT);
-					placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, 0));
-
-					// Remove extra placeholders at last
-					if (placeholders.length >= 3) {
-						for (let k = 0; k < components.length; k++) {
-							placeholders.splice(-1, 1);
-						}
-					}
-
-					 // Remove extra stop signs
-					for (let k = 0; k < i; k++) {
-						let length = document.getElementsByClassName('stop').length;
-						document.getElementsByClassName('stop')[length - 1].parentNode.removeChild(document.getElementsByClassName('stop')[length - 1]);
-					}
 					
 					// If there is one or more blocks below if/else,
 					// move them to the end of true branch
@@ -1070,18 +1051,20 @@
 						components.splice(i+1, 1);
 					}
 				} 
-				// If making a task block
-				else {
-					JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), 0);
-					placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
-					// Add stop sign to task block
-					const stop = addStop(new Vector(maxJoinX - PH_WIDTH / 2, components[i].view.height - SIZE * 2));
-					// Calculate location
-					Dom.translate(stop, maxJoinX - PH_WIDTH / 6.8, offsetY - PH_HEIGHT / 4);
-					g.appendChild(stop);
-				}
 			}
 
+			/* Add placeholder & stop sign to the BOTTOM of last component 
+			 if it's not a switch component */
+			if (components[i - 1] instanceof TaskStepComponent){
+				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
+				// Add stop sign to task block
+				const stop = addStop();
+				// Calculate location
+				Dom.translate(stop, maxJoinX - PH_WIDTH / 6.8, offsetY - PH_HEIGHT / 16);
+				g.appendChild(stop);
+			}
+			
 			return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
 		}
 		getClientPosition() {
@@ -1095,19 +1078,34 @@
 			});
 		}
 	}
+
+	// Modified: placeholders are changed to be plus signs
 	function appendPlaceholder(g, x, y) {
-		const rect = Dom.svg('rect', {
+		const g1 = Dom.svg('g', {
 			class: 'sqd-placeholder',
-			width: PH_WIDTH,
-			height: PH_HEIGHT,
-			x,
-			y,
-			rx: 6,
-			ry: 6,
 			visibility: 'hidden'
 		});
-		g.appendChild(rect);
-		return rect;
+		const circle = Dom.svg('circle', {
+			class: 'sqd-placeholder',
+			cx: x + PH_WIDTH / 2,
+			cy: y + PH_HEIGHT / 2,
+			r: SIZE / 4,
+			
+		}); 
+		const startX = x + PH_WIDTH / 2 - SIZE / 8;
+		const startY = y + PH_HEIGHT / 2 - SIZE / 8;
+		const endX = x + PH_WIDTH / 2 + SIZE / 8;
+		const endY = y + PH_HEIGHT / 2 + SIZE / 8;
+
+		const sign = Dom.svg('path', {
+			class: 'sqd-placeholder-icon',
+			d: `M ${startX} ${y + PH_HEIGHT / 2} H ${endX} M ${x+PH_WIDTH / 2} ${startY} V ${endY}`
+		});
+		g1.appendChild(circle);
+		g1.appendChild(sign);
+		g.appendChild(g1);
+
+		return g1;
 	}
 
 	class SequenceComponent {
@@ -1467,7 +1465,7 @@
 				);
 
 				const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
-				const fillingHeight = containerHeight - childEndY - CONNECTION_HEIGHT;
+				//const fillingHeight = containerHeight - childEndY - CONNECTION_HEIGHT;
 				// if (fillingHeight > 0) {
 				//     JoinView.createStraightJoin(g, new Vector(containerOffsets[i] + joinXs[i] + PADDING_X$1, childEndY), fillingHeight);
 				// }
@@ -1483,7 +1481,7 @@
 			LabelView.create(g, containerWidths[0], PADDING_TOP, step.name);
 			JoinView.createStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP);
 			const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
-			const inputView = InputView.createRectInput(g, containerWidths[0], 0, iconUrl);
+			const inputView = InputView.createRoundInput(g, containerWidths[0], 0, iconUrl);
 			JoinView.createJoins(
 				g,
 				new Vector(containerWidths[0], PADDING_TOP + LABEL_HEIGHT),
@@ -1820,6 +1818,7 @@
 		}
 		find(vLt, vWidth, vHeight) {
 			var _a;
+			
 			if (!this.cache) {
 				this.cache = this.placeholders.map(placeholder => {
 					const rect = placeholder.element.getBoundingClientRect();
@@ -1877,7 +1876,6 @@
 				finder: PlaceholderFinder.create(this.context.getPlaceholders(), this.context),
 				offset
 			};
-			//console.log(this.state);
 
 		}
 		onMove(delta) {
@@ -1885,7 +1883,9 @@
 				const newPosition = this.state.startPosition.subtract(delta).subtract(this.state.offset);
 				this.view.setPosition(newPosition);
 				const placeholder = this.state.finder.find(newPosition, this.view.width, this.view.height);
+	
 				if (this.currentPlaceholder !== placeholder) {
+					//console.log("not the same");
 					if (this.currentPlaceholder) {
 						this.currentPlaceholder.setIsHover(false);
 					}
@@ -2292,18 +2292,7 @@
 				d: `M ${s * 0.2} 0 L ${s} ${s / 2} L ${s * 0.2} ${s} Z`
 			});
 			g.appendChild(start);
-		} else {
-			const stop = Dom.svg('rect', {
-				class: 'sqd-start-stop-icon',
-				x: m,
-				y: m,
-				width: s,
-				height: s,
-				rx: 4,
-				ry: 4
-			});
-			g.appendChild(stop);
-		}
+		} 
 		return g;
 	}
 
