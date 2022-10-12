@@ -1440,52 +1440,105 @@
 				id: 'if'
 			});
 			parent.appendChild(g);
+
 			const branchNames = Object.keys(step.branches);
 			const sequenceComponents = branchNames.map(bn => SequenceComponent.create(g, step.branches[bn], configuration));
 			const maxChildHeight = Math.max(...sequenceComponents.map(s => s.view.height));
 			const containerWidths = sequenceComponents.map(s => Math.max(s.view.width, MIN_CHILDREN_WIDTH) + PADDING_X$1 * 2);
 			const containersWidth = containerWidths.reduce((p, c) => p + c, 0);
-			const containerHeight = maxChildHeight + PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT * 2;
+			//const containerHeight = maxChildHeight + PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT * 2;
 			const containerOffsets = [];
 			const joinXs = sequenceComponents.map(s => Math.max(s.view.joinX, MIN_CHILDREN_WIDTH / 2));
+			
+			// Create branches
+			const boxHeight = ICON_SIZE + PADDING_Y * 2;
+			// Modified, added boxHeight to containerHeight
+			const containerHeight = maxChildHeight + PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT * 2 + boxHeight / 2;
 			let totalX = 0;
 			for (let i = 0; i < branchNames.length; i++) {
 				containerOffsets.push(totalX);
 				totalX += containerWidths[i];
 			}
+			
 			branchNames.forEach((branchName, i) => {
 				const sequence = sequenceComponents[i];
 				const offsetX = containerOffsets[i];
 				LabelView.create(
 					g,
 					offsetX + joinXs[i] + PADDING_X$1,
-					PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT,
+					PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT + boxHeight / 2,
 					branchName,
 					'secondary'
 				);
 
-				const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
+				//const childEndY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + sequence.view.height;
 				//const fillingHeight = containerHeight - childEndY - CONNECTION_HEIGHT;
 				// if (fillingHeight > 0) {
 				//     JoinView.createStraightJoin(g, new Vector(containerOffsets[i] + joinXs[i] + PADDING_X$1, childEndY), fillingHeight);
 				// }
 				const sequenceX = offsetX + PADDING_X$1 + Math.max((MIN_CHILDREN_WIDTH - sequence.view.width) / 2, 0);
-				const sequenceY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT;
+				
+				// Modified: added boxHeight to sequenceY
+				//const sequenceY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT;
+				const sequenceY = PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + boxHeight / 2;
+				
 				JoinView.createStraightJoin(
 					g,
-					new Vector(containerOffsets[i] + joinXs[i] + PADDING_X$1, PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT),
+					new Vector(containerOffsets[i] + joinXs[i] + PADDING_X$1, PADDING_TOP + LABEL_HEIGHT * 2 + CONNECTION_HEIGHT + boxHeight / 2),
 					PH_HEIGHT
 				);
 				Dom.translate(sequence.view.g, sequenceX, sequenceY);
 			});
-			LabelView.create(g, containerWidths[0], PADDING_TOP, step.name);
-			JoinView.createStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP);
+			//LabelView.create(g, containerWidths[0], PADDING_TOP, step.name);
+			
+			// New look of if/else block
+			const g1 = Dom.svg("g");
+			
+			const text = Dom.svg('text', {
+				x: ICON_SIZE + containerWidths[0] - PADDING_X * 4,
+				y: boxHeight / 2 + PADDING_TOP,
+				class: 'sqd-task-text'
+			});
+			text.textContent = "If/Else";
+			g1.appendChild(text);
+			const textWidth = Math.max(text.getBBox().width + PADDING_X * 2 + ICON_SIZE, MIN_TEXT_WIDTH);
+			const boxWidth = ICON_SIZE + PADDING_X * 3 + textWidth;
+			const rect = Dom.svg('rect', {
+				x: containerWidths[0] - textWidth,
+				y: PADDING_TOP,
+				class: 'sqd-task-rect',
+				width: boxWidth,
+				height: boxHeight,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			g1.insertBefore(rect, text);
 			const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+			const icon = iconUrl
+				? Dom.svg('image', {
+						href: iconUrl
+				  })
+				: Dom.svg('rect', {
+						class: 'sqd-task-empty-icon',
+						rx: 4,
+						ry: 4
+				  });
+			Dom.attrs(icon, {
+				x: containerWidths[0]- textWidth + PADDING_X,
+				y: PADDING_TOP*1.5,
+				width: ICON_SIZE,
+				height: ICON_SIZE
+			});
+			g1.appendChild(icon);
+			g.appendChild(g1);
+
+			JoinView.createStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP + boxHeight);
+			//const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
 			const inputView = InputView.createRoundInput(g, containerWidths[0], 0, iconUrl);
 			JoinView.createJoins(
 				g,
-				new Vector(containerWidths[0], PADDING_TOP + LABEL_HEIGHT),
-				containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X$1, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT))
+				new Vector(containerWidths[0], PADDING_TOP + LABEL_HEIGHT + boxHeight / 2),
+				containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X$1, PADDING_TOP + LABEL_HEIGHT + CONNECTION_HEIGHT + boxHeight / 2))
 			);
 			//JoinView.createJoins(g, new Vector(containerWidths[0], containerHeight), containerOffsets.map((o, i) => new Vector(o + joinXs[i] + PADDING_X$1, PADDING_TOP + CONNECTION_HEIGHT + LABEL_HEIGHT * 2 + maxChildHeight)));
 			const regionView = RegionView.create(g, containerWidths, containerHeight);
