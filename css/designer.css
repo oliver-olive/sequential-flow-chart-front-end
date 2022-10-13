@@ -256,3 +256,32 @@
 	stroke-width: 1;
 	/* stroke-dasharray: 3; */
 }
+.more {
+	position: relative;
+	display: inline-block;
+	border-radius: 5px;
+	margin-right: 8px;
+	height: 22px;
+	width: 22px;
+	cursor: pointer;
+}
+.more:hover {
+	display: block;
+	cursor: pointer;
+}
+.moreicon{
+	position: relative;
+	display: inline-block;
+	border-radius: 5px;
+	margin-right: 8px;
+	height: 22px;
+	width: 22px;
+	cursor: pointer;
+}
+.moreicon:hover {
+	display: block;
+	cursor: pointer;
+}
+.sqd-task-rect-dropdown{
+	position: fixed;
+}
