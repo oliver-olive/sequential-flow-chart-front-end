@@ -1854,7 +1854,7 @@
 			 	  });
 			 Dom.attrs(icon1, {
 			 	class: "moreicon sqd-hidden",
-			 	x: ICON_SIZE + 3 * PADDING_X + textWidth + 44,
+			 	x: ICON_SIZE + 3 * PADDING_X + textWidth + 40,
 			 	y: PADDING_Y,
 			 	width: ICON_SIZE,
 			 	height: ICON_SIZE
@@ -2425,6 +2425,7 @@
 			}
 		}
 		onEnd(interrupt) {
+			console.log(2428, this.pressedStepComponent)
 			if (!interrupt) {
 				this.context.setSelectedStep(this.pressedStepComponent.step);
 			}
@@ -2817,24 +2818,24 @@
 			if (clickedStep) {
 				
 				this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
-				const moreid = clickedStep.view.g.childNodes[3].id.toString();
-				console.log(2821,clickedStep.view)
-				const but = document.getElementById(moreid)
-				if(but){
-					but.onclick = function(){
-						clickedStep.view.icon1.classList.toggle("sqd-hidden");
-						clickedStep.view.icon2.classList.toggle("sqd-hidden");
-						clickedStep.view.icon3.classList.toggle("sqd-hidden");
-					}
-				}
 				if(clickedStep.view.g.childNodes[14]){
 					const moreidIf = clickedStep.view.g.childNodes[14].id.toString();
 					const butIf = document.getElementById(moreidIf);
 					butIf.onclick = function(){
-						clickedStep.view.g.childNodes[15].classList.toggle("sqd-hidden");
-						clickedStep.view.g.childNodes[16].classList.toggle("sqd-hidden");
-						clickedStep.view.g.childNodes[17].classList.toggle("sqd-hidden");
+						clickedStep.view.icon1.classList.toggle("sqd-hidden");
+						clickedStep.view.icon2.classList.toggle("sqd-hidden");
+						clickedStep.view.icon3.classList.toggle("sqd-hidden");
 					}
+				}else{
+					//if(clickedStep.view.g.childNodes[3]){
+						const moreid = clickedStep.view.g.childNodes[3].id.toString();
+						const but = document.getElementById(moreid)
+						but.onclick = function(){
+							clickedStep.view.icon1.classList.toggle("sqd-hidden");
+							clickedStep.view.icon2.classList.toggle("sqd-hidden");
+							clickedStep.view.icon3.classList.toggle("sqd-hidden");
+						}
+					//}
 				}
 				// const dropdown = clickedStep.view.g.childNodes[6].id;
 				// const dropdownbut = document.getElementById(dropdown)
@@ -2850,8 +2851,8 @@
 				if(but){
 					but.forEach((e) =>e.classList.add("sqd-hidden"));
 				}
-				//console.log(2663, this.view.canvas.childNodes[2].childNodes[0].childNodes[0].childNodes)
-				this.view.canvas.childNodes[2].childNodes[0].childNodes[0].childNodes.forEach((child) => {if(child.childNodes[7]) {child.childNodes[7].classList.add("sqd-hidden")}});
+				//this.view.canvas.childNodes[2].childNodes[0].childNodes[0].childNodes.forEach((child) => {if(child.childNodes[7]) {child.childNodes[7].classList.add("sqd-hidden")}});
+				console.log(2855, this.view.canvas.childNodes[2].childNodes[0].childNodes[0].childNodes)
 				this.context.behaviorController.start(position, MoveViewPortBehavior.create(this.context));
 			}
 		}
