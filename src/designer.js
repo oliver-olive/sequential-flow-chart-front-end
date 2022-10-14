@@ -2163,6 +2163,13 @@
 		onStart(position) {
 			let offset;
 			//console.log(this.movingStepComponent);
+			// Modified: adding more properties
+			console.log("drag step behavior",this.step);
+			this.step["createdAt"] = new Date().toLocaleString();
+			this.step["createdBy"] = "userID";
+			this.step["updatedAt"] = " ";
+			this.step["updatedBy"] = "userID";
+			
 			if (this.movingStepComponent) {
 				this.movingStepComponent.setState(StepComponentState.dragging);
 				const clientPosition = this.movingStepComponent.view.getClientPosition();

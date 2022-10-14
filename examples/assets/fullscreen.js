@@ -105,7 +105,9 @@ const configuration = {
 
 // start from canvas with only start and end points
 const startDefinition = {
-	properties: {},
+	properties: {
+		journeyName:'test'
+	},
 	sequence: [
 		// createIfStep('00000000000000000000000000000001',
 		// 	[ createTaskStep('00000000000000000000000000000002', 'save', 'Save file') ],
