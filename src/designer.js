@@ -934,26 +934,6 @@
 				x2: start.x,
 				y2: start.y + height
 			});
-			const g = Dom.svg('g');
-			const circle = Dom.svg('circle', {
-				class: 'sqd-start-stop',
-				cx: SIZE / 2,
-				cy: SIZE / 2,
-				r: SIZE / 2
-			});
-			const stop = Dom.svg('rect', {
-				class: 'sqd-start-stop-icon',
-				x: start.x,
-				y: start.y + height,
-				width: SIZE * 0.5,
-				height: SIZE * 0.5,
-				rx: 4,
-				ry: 4
-			});
-			g.appendChild(circle);
-			g.appendChild(stop);
-			//Dom.translate(g, start.x, start.y + height);
-			join.appendChild(g);
 			//console.log(join);
 			parent.insertBefore(join, parent.firstChild);
 		}
@@ -1028,7 +1008,8 @@
 			}
 
 			// Adding lines, placeholders, and stop points on TOP of components
-			for (let i = 0; i < components.length; i++) {
+			let i = 0;
+			for (i; i < components.length; i++) {
 				const offsetX = maxJoinX - components[i].view.joinX;
 				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
 				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
@@ -1036,10 +1017,23 @@
 				offsetY += components[i].view.height + PH_HEIGHT;
 			}			
 			
-			// Modify switch components
-			let i = 0;
-			for (i; i < components.length; i++) {
-				
+			/* Add placeholder & stop sign to the BOTTOM of last component 
+			 if it's not a switch component */
+			 if (components[i - 1] instanceof TaskStepComponent){
+				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
+				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
+				// Add stop sign to task block
+				const stop = addStop();
+				// Calculate location
+				Dom.translate(stop, maxJoinX - PH_WIDTH / 6.8, offsetY - PH_HEIGHT / 16);
+				g.appendChild(stop);
+			}
+
+			
+			for (i = 0; i < components.length; i++) {
+				// 这里添加dropdown!
+
+				// Modify switch components
 				if (components[i] instanceof SwitchStepComponent) {
 					JoinView.createStraightJoin(g, new Vector(maxJoinX, 0), PH_HEIGHT);
 					
@@ -1054,18 +1048,6 @@
 						components.splice(i+1, 1);
 					}
 				} 
-			}
-
-			/* Add placeholder & stop sign to the BOTTOM of last component 
-			 if it's not a switch component */
-			if (components[i - 1] instanceof TaskStepComponent){
-				JoinView.createStraightJoin(g, new Vector(maxJoinX, offsetY - PH_HEIGHT), PH_HEIGHT);
-				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
-				// Add stop sign to task block
-				const stop = addStop();
-				// Calculate location
-				Dom.translate(stop, maxJoinX - PH_WIDTH / 6.8, offsetY - PH_HEIGHT / 16);
-				g.appendChild(stop);
 			}
 			
 			return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
