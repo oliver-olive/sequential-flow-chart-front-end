@@ -983,7 +983,7 @@
 	}
 
 	const PH_WIDTH = 100;
-	const PH_HEIGHT = 24;
+	const PH_HEIGHT = 90;
 	class SequenceComponentView {
 		constructor(g, width, height, joinX, placeholders, components) {
 			this.g = g;
@@ -1015,6 +1015,43 @@
 				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
 				Dom.translate(components[i].view.g, offsetX, offsetY);
 				offsetY += components[i].view.height + PH_HEIGHT;
+				// console.log(1035,components[i])
+				// const rect = Dom.svg('rect', {
+				// 	x: offsetX,
+				// 	y: offsetY - PH_HEIGHT,
+				// 	class: 'sqd-task-rect',
+				// 	width: 150,
+				// 	height: 42* 2,
+				// 	rx: RECT_RADIUS,
+				// 	ry: RECT_RADIUS
+				// });
+				// Dom.attrs(rect, {
+				// 	class: 'sqd-hidden',
+				// 	id:`dropdown${Date.now()}`
+				// })
+				// const nameText = Dom.svg('text', {
+				// 	class: 'sqd-task-text',
+				// 	x: maxJoinX - components[i].view.joinX + 10,
+				// 	y: offsetY - PH_HEIGHT + 30,
+				// });
+				// Dom.attrs(nameText, {
+				// 	class: 'sqd-hidden',
+				// 	id:`dropdownword${Date.now()}`
+				// })
+				// const nameText1 = Dom.svg('text', {
+				// 	class: 'sqd-task-text',
+				// 	x: maxJoinX - components[i].view.joinX + 10,
+				// 	y: offsetY - PH_HEIGHT + 50,
+				// });
+				// Dom.attrs(nameText1, {
+				// 	class: 'sqd-hidden',
+				// 	id:`dropdownword${Date.now()}`
+				// })
+				// nameText.textContent = 'Select List:';
+				// nameText1.textContent = 'Run:';
+				// g.appendChild(nameText)
+				// g.appendChild(nameText1)
+				// g.insertBefore(rect, nameText);
 			}			
 			
 			/* Add placeholder & stop sign to the BOTTOM of last component 
@@ -1024,15 +1061,44 @@
 				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
 				// Add stop sign to task block
 				const stop = addStop();
-				// Calculate location
 				Dom.translate(stop, maxJoinX - PH_WIDTH / 6.8, offsetY - PH_HEIGHT / 16);
+				
+				// Calculate location
 				g.appendChild(stop);
 			}
 
 			
 			for (i = 0; i < components.length; i++) {
 				// 这里添加dropdown!
-
+				// console.log(1035,components[i])
+				// const rect = Dom.svg('rect', {
+				// 	x: maxJoinX - components[i].view.joinX,
+				// 	y: components[i].view.height + PH_HEIGHT,
+				// 	class: 'sqd-task-rect',
+				// 	width: 150,
+				// 	height: 42* 2,
+				// 	rx: RECT_RADIUS,
+				// 	ry: RECT_RADIUS
+				// });
+				// Dom.attrs(rect, {
+				// 	id:`dropdown${Date.now()}`
+				// })
+				// const nameText = Dom.svg('text', {
+				// 	class: 'sqd-task-text',
+				// 	x: maxJoinX - components[i].view.joinX + 10,
+				// 	y: offsetY - PH_HEIGHT + 30,
+				// });
+				// const nameText1 = Dom.svg('text', {
+				// 	class: 'sqd-task-text',
+				// 	x: maxJoinX - components[i].view.joinX + 10,
+				// 	y: offsetY - PH_HEIGHT + 50,
+				// });
+				// nameText.textContent = 'Select List:';
+				// nameText1.textContent = 'Run:';
+				// g.appendChild(nameText)
+				// g.appendChild(nameText1)
+				// g.insertBefore(rect, nameText);
+				
 				// Modify switch components
 				if (components[i] instanceof SwitchStepComponent) {
 					JoinView.createStraightJoin(g, new Vector(maxJoinX, 0), PH_HEIGHT);
@@ -1878,11 +1944,47 @@
 				width: ICON_SIZE,
 				height: ICON_SIZE
 			});
+			const rect1 = Dom.svg('rect', {
+				x: 0.5,
+				y: boxHeight,
+				class: 'sqd-task-rect sqd-hidden',
+				width: boxWidth,
+				height: 2 * boxHeight,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			Dom.attrs(rect1, {
+					//class: 'sqd-hidden',
+					id:`dropdown${Date.now()}`
+				})
+			const nameText = Dom.svg('text', {
+			class: 'sqd-task-text',
+					x: PADDING_X,
+					y: 1.5 * boxHeight,
+				});
+			Dom.attrs(nameText, {
+					class: 'sqd-hidden',
+					id:`dropdownword1${Date.now()}`
+				})
+			const nameText1 = Dom.svg('text', {
+					class: 'sqd-task-text',
+					x: PADDING_X,
+					y: 2 * boxHeight,
+				});
+				Dom.attrs(nameText1, {
+					class: 'sqd-hidden',
+					id:`dropdownword2${Date.now()}`
+				})
+				nameText.textContent = 'Select List:';
+				nameText1.textContent = 'Run:';
 			g.appendChild(icon);
 			g.appendChild(moreIcon);
 			g.appendChild(icon1);
 			g.appendChild(icon2);
 			g.appendChild(icon3);
+			g.appendChild(nameText);
+			g.appendChild(nameText1);
+			g.insertBefore(rect1, nameText);
 			const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
 			const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
 			const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
@@ -2819,8 +2921,18 @@
 						}
 					//}
 				}
-				// const dropdown = clickedStep.view.g.childNodes[6].id;
-				// const dropdownbut = document.getElementById(dropdown)
+				if(clickedStep.view.g.childNodes[6]){
+					const dropdownButId = clickedStep.view.g.childNodes[6].id.toString();
+					const dropdownBut = document.getElementById(dropdownButId);
+					dropdownBut.onclick = function(){
+						clickedStep.view.g.childNodes[7].classList.toggle('sqd-hidden');
+						clickedStep.view.g.childNodes[8].classList.toggle('sqd-hidden');
+						clickedStep.view.g.childNodes[9].classList.toggle('sqd-hidden');
+					}
+				}
+
+				//const dropdown = clickedStep.view.g.childNodes[6].id;
+				console.log(2951, clickedStep.view.g.childNodes)
 				// dropdownbut.onclick = function(){
 					
 				// 	const dropdownwindow = clickedStep.view.g.childNodes[7].id;
