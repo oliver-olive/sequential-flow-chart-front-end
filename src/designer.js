@@ -1977,6 +1977,18 @@
 				})
 				nameText.textContent = 'Select List:';
 				nameText1.textContent = 'Run:';
+			//new added
+			
+			const dropdownShape = Dom.svg('rect', {
+				width: 198,
+				height: 22,
+				class: 'option select-field',
+				fill: "#fff",
+				stroke: "#a0a0a0",
+				x: ICON_SIZE + 3 * PADDING_X + textWidth
+			})
+			
+			//svgDropDown(config)
 			g.appendChild(icon);
 			g.appendChild(moreIcon);
 			g.appendChild(icon1);
@@ -2163,13 +2175,11 @@
 		onStart(position) {
 			let offset;
 			//console.log(this.movingStepComponent);
-			// Modified: adding more properties
 			console.log("drag step behavior",this.step);
 			this.step["createdAt"] = new Date().toLocaleString();
 			this.step["createdBy"] = "userID";
 			this.step["updatedAt"] = " ";
 			this.step["updatedBy"] = "userID";
-			
 			if (this.movingStepComponent) {
 				this.movingStepComponent.setState(StepComponentState.dragging);
 				const clientPosition = this.movingStepComponent.view.getClientPosition();
