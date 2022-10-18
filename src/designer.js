@@ -3237,6 +3237,7 @@
 						clickedStep.view.g.childNodes[7].childNodes[1].childNodes[2].classList.toggle('sqd-hidden');
 						clickedStep.view.g.childNodes[7].childNodes[1].childNodes[3].classList.toggle('sqd-hidden');
 						clickedStep.view.g.childNodes[7].childNodes[1].childNodes[4].classList.toggle('sqd-hidden');
+						clickedStep.view.g.childNodes[7].childNodes[1].childNodes[5].classList.toggle('sqd-hidden');
 					}
 				}
 				
@@ -3252,18 +3253,11 @@
 						clickedStep.view.g.childNodes[6].childNodes[1].childNodes[2].classList.toggle('sqd-hidden');
 						clickedStep.view.g.childNodes[6].childNodes[1].childNodes[3].classList.toggle('sqd-hidden');
 						clickedStep.view.g.childNodes[6].childNodes[1].childNodes[4].classList.toggle('sqd-hidden');
+						clickedStep.view.g.childNodes[6].childNodes[1].childNodes[5].classList.toggle('sqd-hidden');
 					}
 					
 
 				}
-				// if(clickedStep.view.g.childNodes[6].childNodes[1].childNodes[0]){
-				// 	const subDropdownChild1 = clickedStep.view.g.childNodes[6].childNodes[1].childNodes[0]
-				// 	subDropdownChild1.addEventListener('mouseover',(event) =>{
-				// 		console.log(3256, 'mouseover')
-				// 	}
-
-				// 	) 
-				// }
 				
 			} else {
 				var but = document.querySelectorAll(".moreicon");
