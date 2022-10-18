@@ -2085,6 +2085,12 @@
 				y: 1.2 * boxHeight + 15
 				
 			})
+			const dropdownBoxBottomShapeText = Dom.svg('text', {
+				class: 'sqd-task-text sqd-hidden',
+						x: ICON_SIZE + 5 * PADDING_X,
+						y: 1.7 * boxHeight,
+					});
+			dropdownBoxBottomShapeText.textContent = 'Any list'
 			const dropdownBoxBottomShapecover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2096,9 +2102,42 @@
 				
 			})
 			Dom.attrs(dropdownBoxBottomShapecover,{
-				opacity: 0.5
+				opacity: 0
 				}
 			)
+
+
+			const dropdownBoxBottomShapeS = Dom.svg('rect', {
+				width: 60,
+				height: 15,
+				class: 'option select-field sqd-hidden',
+				fill: "#fff",
+				stroke: "#a0a0a0",
+				x: ICON_SIZE + 5 * PADDING_X,
+				y: 1.2 * boxHeight + 30
+				
+			})
+			const dropdownBoxBottomShapeSText = Dom.svg('text', {
+				class: 'sqd-task-text sqd-hidden',
+						x: ICON_SIZE + 5 * PADDING_X,
+						y: 2.05 * boxHeight,
+					});
+			dropdownBoxBottomShapeSText.textContent = 'List A'
+			const dropdownBoxBottomShapeScover = Dom.svg('rect', {
+				width: 60,
+				height: 15,
+				class: 'option select-field sqd-hidden',
+				fill: "#fff",
+				stroke: "#a0a0a0",
+				x: ICON_SIZE + 5 * PADDING_X,
+				y: 1.2 * boxHeight + 30
+				
+			})
+			Dom.attrs(dropdownBoxBottomShapeScover,{
+				opacity: 0
+				}
+			)
+			
 			const dropdownBoxBottomShape1 = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2108,21 +2147,13 @@
 				x: ICON_SIZE + 5 * PADDING_X,
 				y: 1.75 * boxHeight + 15
 			})
-			const dropdownBoxBottomShapeText = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
-						x: ICON_SIZE + 5 * PADDING_X,
-						y: 1.7 * boxHeight,
-					});
-			 const dropdownBoxBottomShapeText1 = Dom.svg('text', {
-			 	class: 'sqd-task-text sqd-hidden',
-			 			x: ICON_SIZE + 5 * PADDING_X,
-			 			y: 2.05 * boxHeight,
-			 		});
-			 const dropdownBoxBottomShape1Text = Dom.svg('text', {
+			
+			const dropdownBoxBottomShape1Text = Dom.svg('text', {
 			 	class: 'sqd-task-text sqd-hidden',
 			 			x: ICON_SIZE + 5 * PADDING_X,
 			 			y: 2.25 * boxHeight,
 			 		});	
+			dropdownBoxBottomShape1Text.textContent = 'Once'
 			const dropdownBoxBottomShape1cover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2134,18 +2165,41 @@
 				
 			})
 			Dom.attrs(dropdownBoxBottomShape1cover,{
-				opacity: 0.5
+				opacity: 0
 				}
 			)
-			 const dropdownBoxBottomShape1Text1 = Dom.svg('text', {
-			 	class: 'sqd-task-text sqd-hidden',
+			const dropdownBoxBottomShape1S = Dom.svg('rect', {
+				width: 60,
+				height: 15,
+				class: 'option select-field sqd-hidden',
+				fill: "#fff",
+				stroke: "#a0a0a0",
+				x: ICON_SIZE + 5 * PADDING_X,
+				y: 1.75 * boxHeight + 30
+			})
+
+			const dropdownBoxBottomShape1SText = Dom.svg('text', {
+			 	class: 'sqd-task-text  sqd-hidden',
 			 			x: ICON_SIZE + 5 * PADDING_X,
 			 			y: 2.6 * boxHeight,
 			 		});				
-			dropdownBoxBottomShapeText.textContent = 'Any list'
-			//dropdownBoxBottomShapeText1.textContent = 'List A'
-			dropdownBoxBottomShape1Text.textContent = 'Once'
-			//dropdownBoxBottomShape1Text1.textContent = 'Multiple T'
+			dropdownBoxBottomShape1SText.textContent = 'Multiple T'
+			const dropdownBoxBottomShape1Scover = Dom.svg('rect', {
+				width: 60,
+				height: 15,
+				class: 'option select-field sqd-hidden',
+				fill: "#fff",
+				stroke: "#a0a0a0",
+				x: ICON_SIZE + 5 * PADDING_X,
+				y: 1.75 * boxHeight + 30
+				
+			})
+			Dom.attrs(dropdownBoxBottomShape1Scover,{
+				opacity: 0
+				}
+			)
+			
+			
 			const gSubDropdownboxPop = Dom.svg('g', {
 				class: `sqd-task-group sub-dropdownbox-pop`
 			});
@@ -2155,9 +2209,23 @@
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.insertBefore(dropdownBoxBottomShape,dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapecover)
+			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapeSText)
+			gSubDropdownboxPop.insertBefore(dropdownBoxBottomShapeS,dropdownBoxBottomShapeSText)
+			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapeScover)
+
+
+
+
+
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1Text)
 			gSubDropdownbox1Pop.insertBefore(dropdownBoxBottomShape1,dropdownBoxBottomShape1Text)
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1cover)
+			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1SText)
+			gSubDropdownbox1Pop.insertBefore(dropdownBoxBottomShape1S,dropdownBoxBottomShape1SText)
+			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1Scover)
+			
+
+
 			//testing 
 			gSubDropdownbox.appendChild(dropdownRightButton)
 			gSubDropdownbox1.appendChild(dropdownRightButton1)
@@ -2169,6 +2237,7 @@
 			gSubDropdownbox1.appendChild(dropdownBoxShape1After)
 			gSubDropdown.appendChild(gSubDropdownbox)
 			gSubDropdown.appendChild(gSubDropdownboxPop)
+
 			gSubDropdown1.appendChild(gSubDropdownbox1)
 			gSubDropdown1.appendChild(gSubDropdownbox1Pop)
 			// gDropdown.appendChild(gSubDropdown)
@@ -3131,7 +3200,7 @@
 				// 	}
 				// }else{
 					if(clickedStep.view.g.childNodes[3]){
-						console.log(3071, clickedStep.view.g.childNodes)
+						console.log(3071, clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].id)
 						const moreid = clickedStep.view.g.childNodes[3].id.toString();
 						const but = document.getElementById(moreid)
 						but.onclick = function(){
@@ -3162,23 +3231,39 @@
 					const subDropdownButtonId = clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].id.toString();
 					const subDropdownButton = document.getElementById(subDropdownButtonId);
 					subDropdownButton.onclick = function(){
+						console.log(3234, 'clicked')
 						clickedStep.view.g.childNodes[7].childNodes[1].childNodes[0].classList.toggle('sqd-hidden');
 						clickedStep.view.g.childNodes[7].childNodes[1].childNodes[1].classList.toggle('sqd-hidden');
+						clickedStep.view.g.childNodes[7].childNodes[1].childNodes[2].classList.toggle('sqd-hidden');
+						clickedStep.view.g.childNodes[7].childNodes[1].childNodes[3].classList.toggle('sqd-hidden');
+						clickedStep.view.g.childNodes[7].childNodes[1].childNodes[4].classList.toggle('sqd-hidden');
 					}
-					
-
 				}
 				
 				if(clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].id){
-					const subDropdownButtonId = clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].id.toString();
-					const subDropdownButton = document.getElementById(subDropdownButtonId);
-					subDropdownButton.onclick = function(){
+					console.log(3243, 'valid ID')
+					const subDropdownButtonId1 = clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].id.toString();
+					const subDropdownButton1 = document.getElementById(subDropdownButtonId1);
+					console.log(3246, 'GO TO 3246')
+					subDropdownButton1.onclick = function(){
+						console.log(3248, 'clicked')
 						clickedStep.view.g.childNodes[6].childNodes[1].childNodes[0].classList.toggle('sqd-hidden');
 						clickedStep.view.g.childNodes[6].childNodes[1].childNodes[1].classList.toggle('sqd-hidden');
+						clickedStep.view.g.childNodes[6].childNodes[1].childNodes[2].classList.toggle('sqd-hidden');
+						clickedStep.view.g.childNodes[6].childNodes[1].childNodes[3].classList.toggle('sqd-hidden');
+						clickedStep.view.g.childNodes[6].childNodes[1].childNodes[4].classList.toggle('sqd-hidden');
 					}
 					
 
 				}
+				// if(clickedStep.view.g.childNodes[6].childNodes[1].childNodes[0]){
+				// 	const subDropdownChild1 = clickedStep.view.g.childNodes[6].childNodes[1].childNodes[0]
+				// 	subDropdownChild1.addEventListener('mouseover',(event) =>{
+				// 		console.log(3256, 'mouseover')
+				// 	}
+
+				// 	) 
+				// }
 				
 			} else {
 				var but = document.querySelectorAll(".moreicon");
