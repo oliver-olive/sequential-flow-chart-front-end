@@ -1623,25 +1623,25 @@
 				 // add click event for icon
 				 const icon2 = iconUrl2
 					 ? Dom.svg('image', {
-							 href: iconUrl
+							 href: iconUrl2
 					   })
 					 : Dom.svg('rect', {
 							 class: 'sqd-task-empty-icon',
 							 rx: 4,
 							 ry: 4
 					   });
-				 Dom.attrs(icon2, {
-					 class: "moreicon sqd-hidden",
-					 x: containerWidths[0] + 2 * PADDING_X + ICON_SIZE + 10,
-					 y: PADDING_TOP*1.5 + 22,
-					 width: ICON_SIZE,
-					 height: ICON_SIZE
-				 });
+				Dom.attrs(icon2, {
+						class: "moreicon sqd-hidden",
+						x: containerWidths[0] + 2 * PADDING_X + ICON_SIZE + 10,
+						y: PADDING_TOP*1.5 + 22,
+						width: ICON_SIZE,
+						height: ICON_SIZE
+					});
 				 const iconUrl3 = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
 				 // add click event for icon
 				 const icon3 = iconUrl3
 					 ? Dom.svg('image', {
-							 href: iconUrl
+							 href: iconUrl3
 					   })
 					 : Dom.svg('rect', {
 							 class: 'sqd-task-empty-icon',
@@ -1920,6 +1920,7 @@
 				  });
 			Dom.attrs(icon2, {
 				class: "moreicon sqd-hidden",
+				id: `icon2${Date.now()}`,
 				x: ICON_SIZE + 3 * PADDING_X + textWidth + 22,
 				y: PADDING_Y + 22,
 				width: ICON_SIZE,
@@ -2248,26 +2249,6 @@
 			g.appendChild(gDropdown)
 			g.appendChild(gSubDropdown1)
 			g.appendChild(gSubDropdown)
-			// g.appendChild(icon1);
-			// g.appendChild(icon2);
-			// g.appendChild(icon3);
-			// g.appendChild(nameText);
-			// g.appendChild(nameText1);
-			// g.insertBefore(rect1, nameText);
-			// g.appendChild(dropdownRightButton)
-			// g.appendChild(dropdownRightButton1)
-			// g.insertBefore(dropdownBoxShape, dropdownRightButton)
-			// g.insertBefore(dropdownBoxShape1, dropdownRightButton1)
-			// g.appendChild(dropdownBoxInnerText)
-			// g.appendChild(dropdownBoxInnerText1)
-			// g.appendChild(dropdownBoxBottomShapeText)
-			// g.appendChild(dropdownBoxBottomShapeText1)
-			// g.appendChild(dropdownBoxBottomShape1Text)
-			// g.appendChild(dropdownBoxBottomShape1Text1)
-			// g.insertBefore(dropdownBoxBottomShape, dropdownBoxBottomShapeText)
-			// g.insertBefore(dropdownBoxBottomShape1, dropdownBoxBottomShape1Text)
-			// g.appendChild(dropdownBoxShapeAfter)
-			// g.appendChild(dropdownBoxShape1After)
 			const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
 			const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
 			const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
@@ -3186,21 +3167,28 @@
 		}
 		startBehavior(target, position, forceMoveMode) {
 			const clickedStep = !forceMoveMode && !this.context.isMoveModeEnabled ? this.getRootComponent().findByElement(target) : null;
-			//console.log(clickedStep);
 			if (clickedStep) {
 				this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
-				console.log(2932, clickedStep.view.g.childNodes)
-				// if(clickedStep.view.g.childNodes[14].id){
-				// 	const moreidIf = clickedStep.view.g.childNodes[14].id.toString();
-				// 	const butIf = document.getElementById(moreidIf);
-				// 	butIf.onclick = function(){
-				// 		clickedStep.view.icon1.classList.toggle("sqd-hidden");
-				// 		clickedStep.view.icon2.classList.toggle("sqd-hidden");
-				// 		clickedStep.view.icon3.classList.toggle("sqd-hidden");
-				// 	}
-				// }else{
-					if(clickedStep.view.g.childNodes[3]){
-						console.log(3071, clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].id)
+				console.log(3173, this.context )
+				const fakeThis = this.context 
+				if(clickedStep.view.g.childNodes[4].childNodes[1]){
+					const deleteButtonId = clickedStep.view.g.childNodes[4].childNodes[1].id.toString();
+				 	const deleteButton = document.getElementById(deleteButtonId)
+				 	//console.log(3177, this.context.layoutController.parent)
+				 	deleteButton.onclick = function(){
+						console.log(3178, clickedStep)
+						if (fakeThis.selectedStep.componentType == 'switch'){
+							promptChoices(fakeThis);
+						}
+						else {
+							fakeThis.tryDeleteStep(clickedStep.step, 2);
+						}
+						
+						
+				 	}
+				}
+				if(clickedStep.view.g.childNodes[3]){
+						//console.log(3071, this.view.parentNode)
 						const moreid = clickedStep.view.g.childNodes[3].id.toString();
 						const but = document.getElementById(moreid)
 						but.onclick = function(){
@@ -3487,6 +3475,7 @@
 			this.view.destroy();
 		}
 		onKeyUp(e) {
+			//console.log(3490, 'keyup part')
 			const supportedKeys = ['Backspace', 'Delete'];
 			if (!supportedKeys.includes(e.key)) {
 				return;
