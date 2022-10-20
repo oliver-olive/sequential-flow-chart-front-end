@@ -466,7 +466,7 @@
 			root.appendChild(zoomInButton);
 			root.appendChild(zoomOutButton);
 			root.appendChild(moveButton);
-			root.appendChild(deleteButton);
+			//root.appendChild(deleteButton);
 			parent.appendChild(root);
 			return new ControlBarView(resetButton, zoomInButton, zoomOutButton, moveButton, deleteButton);
 		}
@@ -1613,13 +1613,13 @@
 						  ry: 4
 						});
 				  Dom.attrs(icon1, {
-					  class: "moreicon sqd-hidden",
+					  class: "moreicon",
 					  x: containerWidths[0] + 2 * PADDING_X + ICON_SIZE + 30,
 					  y: PADDING_TOP*1.5,
 					  width: ICON_SIZE,
 					  height: ICON_SIZE
 				  });
-				 const iconUrl2 = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+				 const iconUrl2 ='./assets/delete.svg';
 				 // add click event for icon
 				 const icon2 = iconUrl2
 					 ? Dom.svg('image', {
@@ -1631,14 +1631,14 @@
 							 ry: 4
 					   });
 				Dom.attrs(icon2, {
-						class: "moreicon sqd-hidden",
+						class: "moreicon",
 						id: `icon2${Date.now()}`,
 						x: containerWidths[0] + 2 * PADDING_X + ICON_SIZE + 10,
 						y: PADDING_TOP*1.5 + 22,
 						width: ICON_SIZE,
 						height: ICON_SIZE
 					});
-				 const iconUrl3 = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+				 const iconUrl3 = './assets/edit.svg';
 				 // add click event for icon
 				 const icon3 = iconUrl3
 					 ? Dom.svg('image', {
@@ -1650,7 +1650,7 @@
 							 ry: 4
 					   });
 				 Dom.attrs(icon3, {
-					 class: "moreicon sqd-hidden",
+					 class: "moreicon",
 					 id: `p${Date.now()}`,
 					 x: containerWidths[0] + 2 * PADDING_X + ICON_SIZE + 10,
 					 y: PADDING_TOP*1.5 - 22,
@@ -1658,13 +1658,13 @@
 					 height: ICON_SIZE
 				 });
 			const gRightPop3 = Dom.svg('g', {
-				class: `sqd-switch-group right-popup`
+				class: `sqd-switch-group right-popup sqd-hidden Collapsed`
 			});
 			//edit start here
 
 
 			const gDropdown = Dom.svg('g', {
-				class: `sqd-task-group dropdown sqd-hidden`
+				class: `sqd-task-group dropdown sqd-hidden Collapsed`
 			});
 			const rect1 = Dom.svg('rect', {
 				x: containerWidths[0] - textWidth,
@@ -1703,10 +1703,10 @@
 			gDropdown.appendChild(nameText1)
 			gDropdown.insertBefore(rect1, nameText);
 			const gSubDropdown = Dom.svg('g', {
-				class: `sqd-switch-group sub-dropdown sqd-hidden`
+				class: `sqd-switch-group sub-dropdown sqd-hidden Collapsed`
 			});
 			const gSubDropdown1 = Dom.svg('g', {
-				class: `sqd-switch-group sub-dropdown sqd-hidden`
+				class: `sqd-switch-group sub-dropdown sqd-hidden Collapsed`
 			});
 			const gSubDropdownbox = Dom.svg('g', {
 				class: `sqd-switch-group sub-dropdownbox`
@@ -1958,24 +1958,6 @@
 			g.appendChild(gSubDropdown1)
 			g.appendChild(gSubDropdown)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			JoinView.createStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP + boxHeight);
 			//const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
 			const inputView = InputView.createRoundInput(g, containerWidths[0], 0, iconUrl);
@@ -2207,7 +2189,7 @@
 			// // add click event for icon
 			 	const icon1 = iconUrl1
 			 	? Dom.svg('image', {
-			 			href: iconUrl
+			 			href: iconUrl1
 			 	  })
 			 	: Dom.svg('rect', {
 			 			class: 'sqd-task-empty-icon',
@@ -2215,17 +2197,17 @@
 		 			ry: 4
 			 	  });
 			 Dom.attrs(icon1, {
-			 	class: "moreicon sqd-hidden",
+			 	class: "moreicon",
 			 	x: ICON_SIZE + 3 * PADDING_X + textWidth + 40,
 			 	y: PADDING_Y,
 			 	width: ICON_SIZE,
 			 	height: ICON_SIZE
 			 });
-			const iconUrl2 = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+			const iconUrl2 = './assets/delete.svg';
 			// add click event for icon
 			const icon2 = iconUrl2
 				? Dom.svg('image', {
-						href: iconUrl
+						href: iconUrl2
 				  })
 				: Dom.svg('rect', {
 						class: 'sqd-task-empty-icon',
@@ -2233,18 +2215,18 @@
 						ry: 4
 				  });
 			Dom.attrs(icon2, {
-				class: "moreicon sqd-hidden",
+				class: "moreicon",
 				id: `icon2${Date.now()}`,
 				x: ICON_SIZE + 3 * PADDING_X + textWidth + 22,
 				y: PADDING_Y + 22,
 				width: ICON_SIZE,
 				height: ICON_SIZE
 			});
-			const iconUrl3 = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
+			const iconUrl3 = './assets/edit.svg';
 			// add click event for icon
 			const icon3 = iconUrl3
 				? Dom.svg('image', {
-						href: iconUrl
+						href: iconUrl3
 				  })
 				: Dom.svg('rect', {
 						class: 'sqd-task-empty-icon',
@@ -2252,7 +2234,7 @@
 						ry: 4
 				  });
 			Dom.attrs(icon3, {
-				class: "moreicon sqd-hidden",
+				class: "moreicon",
 				id: `p${Date.now()}`,
 				x: ICON_SIZE + 3 * PADDING_X + textWidth + 22,
 				y: PADDING_Y - 22,
@@ -2260,18 +2242,18 @@
 				height: ICON_SIZE
 			});
 			const gRightPop3 = Dom.svg('g', {
-				class: `sqd-task-group right-popup`
+				class: `sqd-task-group right-popup sqd-hidden Collapsed`
 			});
 			gRightPop3.appendChild(icon1)
 			gRightPop3.appendChild(icon2)
 			gRightPop3.appendChild(icon3)
 			const gDropdown = Dom.svg('g', {
-				class: `sqd-task-group dropdown`
+				class: `sqd-task-group dropdown sqd-hidden Collapsed`
 			});
 			const rect1 = Dom.svg('rect', {
 				x: 0.5,
 				y: boxHeight,
-				class: 'sqd-task-rect sqd-hidden',
+				class: 'sqd-task-rect',
 				width: boxWidth,
 				height: 2 * boxHeight,
 				rx: RECT_RADIUS,
@@ -2287,7 +2269,7 @@
 					y: 1.5 * boxHeight,
 				});
 			Dom.attrs(nameText, {
-					class: 'sqd-hidden',
+					//class: 'sqd-hidden',
 					id:`dropdownword1${Date.now()}`
 				})
 			const nameText1 = Dom.svg('text', {
@@ -2296,7 +2278,7 @@
 					y: 2 * boxHeight,
 				});
 				Dom.attrs(nameText1, {
-					class: 'sqd-hidden',
+					//class: 'sqd-hidden',
 					id:`dropdownword2${Date.now()}`
 				})
 				nameText.textContent = 'Select List:';
@@ -2305,10 +2287,10 @@
 			gDropdown.appendChild(nameText1)
 			gDropdown.insertBefore(rect1, nameText);
 			const gSubDropdown = Dom.svg('g', {
-				class: `sqd-task-group sub-dropdown`
+				class: `sqd-task-group sub-dropdown sqd-hidden Collapsed`
 			});
 			const gSubDropdown1 = Dom.svg('g', {
-				class: `sqd-task-group sub-dropdown`
+				class: `sqd-task-group sub-dropdown sqd-hidden Collapsed`
 			});
 			const gSubDropdownbox = Dom.svg('g', {
 				class: `sqd-task-group sub-dropdownbox`
@@ -2320,7 +2302,7 @@
 			const dropdownBoxShape = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field sqd-hidden',
+				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
@@ -2330,7 +2312,7 @@
 			const dropdownBoxShape1 = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field sqd-hidden',
+				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
@@ -2338,25 +2320,25 @@
 				//id: `dropdownBoxShape1${Date.now()}`
 			})
 			const dropdownRightButton = Dom.svg('text', {
-				class: 'sqd-task-text select-field sqd-hidden',
+				class: 'sqd-task-text select-field',
 						x: ICON_SIZE + 9 * PADDING_X,
 						y: 1.35 * boxHeight,
 					});
 			const dropdownRightButton1 = Dom.svg('text', {
-				class: 'sqd-task-text select-field sqd-hidden',
+				class: 'sqd-task-text select-field',
 						x: ICON_SIZE + 9 * PADDING_X,
 						y: 1.9 * boxHeight,
 					});		
 			dropdownRightButton.textContent = "▼";
 			dropdownRightButton1.textContent = "▼";
 			const dropdownBoxInnerText = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
+				class: 'sqd-task-text',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 1.35 * boxHeight,
 					});
 			dropdownBoxInnerText.textContent = 'Any list';
 			const dropdownBoxInnerText1 = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
+				class: 'sqd-task-text',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 1.9 * boxHeight,
 					});
@@ -2393,7 +2375,7 @@
 			const dropdownBoxBottomShape = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field sqd-hidden',
+				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
@@ -2401,7 +2383,7 @@
 				
 			})
 			const dropdownBoxBottomShapeText = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
+				class: 'sqd-task-text',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 1.7 * boxHeight,
 					});
@@ -2409,7 +2391,7 @@
 			const dropdownBoxBottomShapecover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field sqd-hidden',
+				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
@@ -2425,7 +2407,7 @@
 			const dropdownBoxBottomShapeS = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field sqd-hidden',
+				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
@@ -2433,7 +2415,7 @@
 				
 			})
 			const dropdownBoxBottomShapeSText = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
+				class: 'sqd-task-text',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 2.05 * boxHeight,
 					});
@@ -2441,7 +2423,7 @@
 			const dropdownBoxBottomShapeScover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field sqd-hidden',
+				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
@@ -2456,7 +2438,7 @@
 			const dropdownBoxBottomShape1 = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field sqd-hidden',
+				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
@@ -2464,7 +2446,7 @@
 			})
 			
 			const dropdownBoxBottomShape1Text = Dom.svg('text', {
-			 	class: 'sqd-task-text sqd-hidden',
+			 	class: 'sqd-task-text',
 			 			x: ICON_SIZE + 5 * PADDING_X,
 			 			y: 2.25 * boxHeight,
 			 		});	
@@ -2472,7 +2454,7 @@
 			const dropdownBoxBottomShape1cover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field sqd-hidden',
+				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
@@ -2486,7 +2468,7 @@
 			const dropdownBoxBottomShape1S = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field sqd-hidden',
+				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
@@ -2494,7 +2476,7 @@
 			})
 
 			const dropdownBoxBottomShape1SText = Dom.svg('text', {
-			 	class: 'sqd-task-text  sqd-hidden',
+			 	class: 'sqd-task-text',
 			 			x: ICON_SIZE + 5 * PADDING_X,
 			 			y: 2.6 * boxHeight,
 			 		});				
@@ -2502,7 +2484,7 @@
 			const dropdownBoxBottomShape1Scover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field sqd-hidden',
+				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
@@ -2516,10 +2498,10 @@
 			
 			
 			const gSubDropdownboxPop = Dom.svg('g', {
-				class: `sqd-task-group sub-dropdownbox-pop`
+				class: `sqd-task-group sub-dropdownbox-pop sqd-hidden`
 			});
 			const gSubDropdownbox1Pop = Dom.svg('g', {
-				class: `sqd-task-group sub-dropdownbox-pop`
+				class: `sqd-task-group sub-dropdownbox-pop sqd-hidden`
 			});
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.insertBefore(dropdownBoxBottomShape,dropdownBoxBottomShapeText)
@@ -3491,10 +3473,8 @@
 						const switchMoreButtonId = clickedStep.view.g.childNodes[13].childNodes[3].id.toString();
 						const switchMoreButton = document.getElementById(switchMoreButtonId)
 						switchMoreButton.onclick = function() {
-							
-							clickedStep.view.g.childNodes[14].childNodes[0].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[14].childNodes[1].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[14].childNodes[2].classList.toggle('sqd-hidden');
+							console.log(3467, clickedStep.view.g.childNodes)
+							clickedStep.view.g.childNodes[14].classList.toggle('sqd-hidden');
 						}
 					}
 					//right popout delete
@@ -3559,9 +3539,8 @@
 							const moreid = clickedStep.view.g.childNodes[3].id.toString();
 							const but = document.getElementById(moreid)
 							but.onclick = function(){
-								clickedStep.view.icon1.classList.toggle("sqd-hidden");
-								clickedStep.view.icon2.classList.toggle("sqd-hidden");
-								clickedStep.view.icon3.classList.toggle("sqd-hidden");
+								console.log(3542, clickedStep.view.g.childNodes[4])
+								clickedStep.view.g.childNodes[4].classList.toggle('sqd-hidden');
 							}
 						}
 					//show dropdown
@@ -3570,53 +3549,38 @@
 						const dropdownBut = document.getElementById(dropdownButId);
 						dropdownBut.onclick = function(e){
 							e.stopPropagation();
-							clickedStep.view.g.childNodes[5].childNodes[0].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[5].childNodes[1].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[5].childNodes[2].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[6].childNodes[0].childNodes[0].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[6].childNodes[0].childNodes[1].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[7].childNodes[0].childNodes[0].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[7].childNodes[0].childNodes[1].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList.toggle('sqd-hidden')
+							console.log(3551, clickedStep.view.g.childNodes)
+							clickedStep.view.g.childNodes[5].classList.toggle('sqd-hidden');
+							clickedStep.view.g.childNodes[6].classList.toggle('sqd-hidden');
+							clickedStep.view.g.childNodes[7].classList.toggle('sqd-hidden');
 						}
 					}
 					//show subdropdown
-					if(clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].id){
+					if(clickedStep.view.g.childNodes[7].childNodes[1]){
 						const subDropdownButtonId = clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].id.toString();
 						const subDropdownButton = document.getElementById(subDropdownButtonId);
 						subDropdownButton.onclick = function(){
-							console.log(3234, 'clicked')
-							clickedStep.view.g.childNodes[7].childNodes[1].childNodes[0].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[7].childNodes[1].childNodes[1].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[7].childNodes[1].childNodes[2].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[7].childNodes[1].childNodes[3].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[7].childNodes[1].childNodes[4].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[7].childNodes[1].childNodes[5].classList.toggle('sqd-hidden');
+							console.log(3562, clickedStep.view.g.childNodes[7])
+							clickedStep.view.g.childNodes[7].childNodes[1].classList.toggle('sqd-hidden');
 						}
 					}
 					//show subdropdown1
-					if(clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].id){
+					if(clickedStep.view.g.childNodes[6].childNodes[1]){
 						const subDropdownButtonId1 = clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].id.toString();
 						const subDropdownButton1 = document.getElementById(subDropdownButtonId1);
 						subDropdownButton1.onclick = function(){
-							clickedStep.view.g.childNodes[6].childNodes[1].childNodes[0].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[6].childNodes[1].childNodes[1].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[6].childNodes[1].childNodes[2].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[6].childNodes[1].childNodes[3].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[6].childNodes[1].childNodes[4].classList.toggle('sqd-hidden');
-							clickedStep.view.g.childNodes[6].childNodes[1].childNodes[5].classList.toggle('sqd-hidden');
+							clickedStep.view.g.childNodes[6].childNodes[1].classList.toggle('sqd-hidden');
 						}	
 
 					}
 				}
 			} else {
-				var but = document.querySelectorAll(".moreicon");
-				if(but){
-					but.forEach((e) =>e.classList.add("sqd-hidden"));
-				}
-				//this.view.canvas.childNodes[2].childNodes[0].childNodes[0].childNodes.forEach((child) => {if(child.childNodes[7]) {child.childNodes[7].classList.add("sqd-hidden")}});
-				console.log(2855, this.view.canvas.childNodes[2].childNodes[0].childNodes[0].childNodes)
+				console.log(3577, this)
+				var but = document.querySelectorAll(".Collapsed");
+					if(but){
+						but.forEach((e) =>e.classList.add("sqd-hidden"));
+					}
+
 				this.context.behaviorController.start(position, MoveViewPortBehavior.create(this.context));
 			}
 		}
@@ -3646,13 +3610,20 @@
 		trySelectStep(step) {
 			if (this.selectedStepComponent) {
 				this.selectedStepComponent.setState(StepComponentState.default);
-				//console.log(2867, this.selectedStepComponent.view)
-
-				if(this.selectedStepComponent.view.icon1 ){
-					this.selectedStepComponent.view.icon1.classList.add("sqd-hidden")
-					this.selectedStepComponent.view.icon2.classList.add("sqd-hidden")
-					this.selectedStepComponent.view.icon3.classList.add("sqd-hidden")
-					}
+				console.log(3616, this.selectedStepComponent)
+				//this.selectedStepComponent
+				if(this.selectedStepComponent.step.componentType === "task"){
+					this.selectedStepComponent.view.g.childNodes[4].classList.add('sqd-hidden');
+					this.selectedStepComponent.view.g.childNodes[5].classList.add('sqd-hidden');
+					this.selectedStepComponent.view.g.childNodes[6].classList.add('sqd-hidden');
+					this.selectedStepComponent.view.g.childNodes[7].classList.add('sqd-hidden');
+				}else if(this.selectedStepComponent.step.componentType === "switch"){
+					console.log(3621, this.selectedStepComponent.view.g.childNodes)
+					this.selectedStepComponent.view.g.childNodes[14].classList.add('sqd-hidden');
+					this.selectedStepComponent.view.g.childNodes[15].classList.add('sqd-hidden');
+					this.selectedStepComponent.view.g.childNodes[16].classList.add('sqd-hidden');
+					this.selectedStepComponent.view.g.childNodes[17].classList.add('sqd-hidden');
+				}
 				this.selectedStepComponent = null;
 			}
 			if (step) {
@@ -3662,11 +3633,6 @@
 				}
 				this.selectedStepComponent.setState(StepComponentState.selected);
 				const clickedStep = !this.context.isMoveModeEnabled ? this.getRootComponent().findByElement(this.position) : null;
-				if(clickedStep) {
-					this.selectedStepComponent.view.icon1.classList.remove("sqd-hidden")
-					this.selectedStepComponent.view.icon2.classList.remove("sqd-hidden")
-					this.selectedStepComponent.view.icon3.classList.remove("sqd-hidden")
-				}
 			}
 		}
 		getRootComponent() {
