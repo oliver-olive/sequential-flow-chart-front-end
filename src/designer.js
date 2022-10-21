@@ -1747,18 +1747,34 @@
 					});		
 			dropdownRightButton.textContent = "▼";
 			dropdownRightButton1.textContent = "▼";
-			const dropdownBoxInnerText = Dom.svg('text', {
-				class: 'sqd-task-text',
+			// [17][0][2] default text
+			const dropdownBoxInnerTexta = Dom.svg('text', {
+				class: 'sqd-task-text sqd-hidden',
 						x: containerWidths[0] - 5,
 						y: 1.85 * boxHeight,
 					});
-			dropdownBoxInnerText.textContent = 'Any list';
-			const dropdownBoxInnerText1 = Dom.svg('text', {
-				class: 'sqd-task-text',
+			dropdownBoxInnerTexta.textContent = 'Any list';
+			// [17][0][3] default text
+			const dropdownBoxInnerTextb = Dom.svg('text', {
+				class: 'sqd-task-text sqd-hidden',
+						x: containerWidths[0] - 5,
+						y: 1.85 * boxHeight,
+					});
+			dropdownBoxInnerTextb.textContent = 'List A';
+			// [16][0][2] default text
+			const dropdownBoxInnerText1a = Dom.svg('text', {
+				class: 'sqd-task-text sqd-hidden',
 						x: containerWidths[0] - 5,
 						y: 2.35 * boxHeight,
 					});
-			dropdownBoxInnerText1.textContent = 'Once';
+			dropdownBoxInnerText1a.textContent = 'Once';
+			// [16][0][3] default text
+			const dropdownBoxInnerText1b = Dom.svg('text', {
+				class: 'sqd-task-text sqd-hidden',
+						x: containerWidths[0] - 5,
+						y: 2.35 * boxHeight,
+					});
+			dropdownBoxInnerText1b.textContent = 'Multiple T';
 			const dropdownBoxShapeAfter = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1788,6 +1804,7 @@
 			}
 			)
 			
+			// [17][1][0] Any list
 			const dropdownBoxBottomShape = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1798,12 +1815,14 @@
 				y: 1.7 * boxHeight + 15
 				
 			})
+			// [17][1][1] Any list
 			const dropdownBoxBottomShapeText = Dom.svg('text', {
 				class: 'sqd-task-text',
 						x: containerWidths[0] - 5,
 						y: 1.85 * boxHeight + 15
 					});
 			dropdownBoxBottomShapeText.textContent = 'Any list'
+			// [17][1][2] Any list with id
 			const dropdownBoxBottomShapecover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1815,11 +1834,11 @@
 				
 			})
 			Dom.attrs(dropdownBoxBottomShapecover,{
-				opacity: 0
+				opacity: 0,
+				id: `ifdropdownBoxBtnPopacover${Date.now()}`
 				}
 			)
-
-
+			// [17][1][3] List A
 			const dropdownBoxBottomShapeS = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1830,12 +1849,14 @@
 				y: 1.7 * boxHeight + 30
 				
 			})
+			// [17][1][4] List A
 			const dropdownBoxBottomShapeSText = Dom.svg('text', {
 				class: 'sqd-task-text',
 						x: containerWidths[0] - 5,
 						y: 2.2 * boxHeight + 15,
 					});
 			dropdownBoxBottomShapeSText.textContent = 'List A'
+			// [17][1][5] List A with id
 			const dropdownBoxBottomShapeScover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1847,10 +1868,12 @@
 				
 			})
 			Dom.attrs(dropdownBoxBottomShapeScover,{
-				opacity: 0
+				opacity: 0,
+				id: `ifdropdownBoxBtnPopbcover${Date.now()}`
 				}
 			)
 			
+			// [16][1][0] Once
 			const dropdownBoxBottomShape1 = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1860,13 +1883,14 @@
 				x: containerWidths[0] - 5,
 				y: 2.2 * boxHeight + 15
 			})
-			
+			// [16][1][1] Once
 			const dropdownBoxBottomShape1Text = Dom.svg('text', {
 			 	class: 'sqd-task-text',
 			 			x: containerWidths[0] - 5,
 			 			y:2.35 * boxHeight + 15,
 			 		});	
 			dropdownBoxBottomShape1Text.textContent = 'Once'
+			// [16][1][2] Once with id
 			const dropdownBoxBottomShape1cover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1878,9 +1902,11 @@
 				
 			})
 			Dom.attrs(dropdownBoxBottomShape1cover,{
-				opacity: 0
+				opacity: 0,
+				id: `ifdropdownBoxBtnPop1acover${Date.now()}`
 				}
 			)
+			// [16][1][3] Multiple T
 			const dropdownBoxBottomShape1S = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1890,25 +1916,27 @@
 				x: containerWidths[0] - 5,
 				y: 2.2 * boxHeight + 30
 			})
-
+			// [16][1][4] Multiple T
 			const dropdownBoxBottomShape1SText = Dom.svg('text', {
 			 	class: 'sqd-task-text',
 			 			x: containerWidths[0] - 5,
 			 			y: 2.35 * boxHeight + 30,
 			 		});				
 			dropdownBoxBottomShape1SText.textContent = 'Multiple T'
+			// [16][1][5] Multiple T with id
 			const dropdownBoxBottomShape1Scover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
 				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
-				x: ICON_SIZE + 5 * PADDING_X,
+				x: containerWidths[0] - 5,
 				y: 2.2 * boxHeight + 30
 				
 			})
 			Dom.attrs(dropdownBoxBottomShape1Scover,{
-				opacity: 0
+				opacity: 0,
+				id: `ifdropdownBoxBtnPop1bcover${Date.now()}`
 				}
 			)
 			
@@ -1919,6 +1947,8 @@
 			const gSubDropdownbox1Pop = Dom.svg('g', {
 				class: `sqd-task-group sub-dropdownbox-pop sqd-hidden`
 			});
+
+			//[17][1]
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.insertBefore(dropdownBoxBottomShape,dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapecover)
@@ -1926,6 +1956,7 @@
 			gSubDropdownboxPop.insertBefore(dropdownBoxBottomShapeS,dropdownBoxBottomShapeSText)
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapeScover)
 
+			// [16][1]
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1Text)
 			gSubDropdownbox1Pop.insertBefore(dropdownBoxBottomShape1,dropdownBoxBottomShape1Text)
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1cover)
@@ -1933,17 +1964,25 @@
 			gSubDropdownbox1Pop.insertBefore(dropdownBoxBottomShape1S,dropdownBoxBottomShape1SText)
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1Scover)
 
+			// [17][0]
 			gSubDropdownbox.appendChild(dropdownRightButton)
 			gSubDropdownbox.insertBefore(dropdownBoxShape, dropdownRightButton)
-			gSubDropdownbox.appendChild(dropdownBoxInnerText)
+			gSubDropdownbox.appendChild(dropdownBoxInnerTexta)
+			gSubDropdownbox.appendChild(dropdownBoxInnerTextb)
 			gSubDropdownbox.appendChild(dropdownBoxShapeAfter)
+
+			// [17]
 			gSubDropdown.appendChild(gSubDropdownbox)
 			gSubDropdown.appendChild(gSubDropdownboxPop)
 
+			// [16][0]
 			gSubDropdownbox1.appendChild(dropdownRightButton1)
 			gSubDropdownbox1.insertBefore(dropdownBoxShape1, dropdownRightButton1)
-			gSubDropdownbox1.appendChild(dropdownBoxInnerText1)
+			gSubDropdownbox1.appendChild(dropdownBoxInnerText1a)
+			gSubDropdownbox1.appendChild(dropdownBoxInnerText1b)
 			gSubDropdownbox1.appendChild(dropdownBoxShape1After)
+
+			// [16]
 			gSubDropdown1.appendChild(gSubDropdownbox1)
 			gSubDropdown1.appendChild(gSubDropdownbox1Pop)
 
@@ -1954,9 +1993,11 @@
 			g1.appendChild(moreIcon);
 			g.appendChild(g1);
 			g.appendChild(gRightPop3);
+			// dropdown part
 			g.appendChild(gDropdown)
-			g.appendChild(gSubDropdown1)
-			g.appendChild(gSubDropdown)
+			// subdropdown part
+			g.appendChild(gSubDropdown1)  //[16] 下方
+			g.appendChild(gSubDropdown)  //[17] 上方
 
 			JoinView.createStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP + boxHeight);
 			//const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
@@ -2107,6 +2148,7 @@
 		}
 	}
 
+	// task blocks
 	const PADDING_X = 12;
 	const PADDING_Y = 10;
 	const MIN_TEXT_WIDTH = 70;
@@ -2331,18 +2373,35 @@
 					});		
 			dropdownRightButton.textContent = "▼";
 			dropdownRightButton1.textContent = "▼";
-			const dropdownBoxInnerText = Dom.svg('text', {
-				class: 'sqd-task-text',
+			// [7][0][2] default text
+			const dropdownBoxInnerTexta = Dom.svg('text', {
+				class: 'sqd-task-text sqd-hidden',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 1.35 * boxHeight,
 					});
-			dropdownBoxInnerText.textContent = 'Any list';
-			const dropdownBoxInnerText1 = Dom.svg('text', {
-				class: 'sqd-task-text',
+			dropdownBoxInnerTexta.textContent = 'Any list';
+			// [7][0][3] default text
+			const dropdownBoxInnerTextb = Dom.svg('text', {
+				class: 'sqd-task-text sqd-hidden',
+						x: ICON_SIZE + 5 * PADDING_X,
+						y: 1.35 * boxHeight,
+					});
+			dropdownBoxInnerTextb.textContent = 'List A';
+			// [6][0][2] default text
+			const dropdownBoxInnerText1a = Dom.svg('text', {
+				class: 'sqd-task-text sqd-hidden',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 1.9 * boxHeight,
 					});
-			dropdownBoxInnerText1.textContent = 'Once';
+			dropdownBoxInnerText1a.textContent = 'Once';
+			// [6][0][3] default text
+			const dropdownBoxInnerText1b = Dom.svg('text', {
+				class: 'sqd-task-text sqd-hidden',
+						x: ICON_SIZE + 5 * PADDING_X,
+						y: 1.9 * boxHeight,
+					});
+			dropdownBoxInnerText1b.textContent = 'Multiple T';
+			//
 			const dropdownBoxShapeAfter = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2371,7 +2430,8 @@
 				opacity: 0
 			}
 			)
-			
+
+			// [7][1][0] pop 'Any List' shape
 			const dropdownBoxBottomShape = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2382,12 +2442,14 @@
 				y: 1.2 * boxHeight + 15
 				
 			})
+			// [7][1][1] pop 'Any List' text
 			const dropdownBoxBottomShapeText = Dom.svg('text', {
 				class: 'sqd-task-text',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 1.7 * boxHeight,
 					});
 			dropdownBoxBottomShapeText.textContent = 'Any list'
+			// [7][1][2] pop 'Any List' cover
 			const dropdownBoxBottomShapecover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2399,11 +2461,11 @@
 				
 			})
 			Dom.attrs(dropdownBoxBottomShapecover,{
-				opacity: 0
+				opacity: 0,
+				id: `dropdownBoxBtnPopacover${Date.now()}`
 				}
 			)
-
-
+			// [7][1][3] pop 'List A' shape
 			const dropdownBoxBottomShapeS = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2414,12 +2476,14 @@
 				y: 1.2 * boxHeight + 30
 				
 			})
+			// [7][1][4] pop 'List A' text
 			const dropdownBoxBottomShapeSText = Dom.svg('text', {
 				class: 'sqd-task-text',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 2.05 * boxHeight,
 					});
 			dropdownBoxBottomShapeSText.textContent = 'List A'
+			// [7][1][5] pop 'List A' cover
 			const dropdownBoxBottomShapeScover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2431,10 +2495,12 @@
 				
 			})
 			Dom.attrs(dropdownBoxBottomShapeScover,{
-				opacity: 0
+				opacity: 0,
+				id: `dropdownBoxBtnPopbcover${Date.now()}`
 				}
 			)
 			
+			// [6][1][0] pop 'Once' shape
 			const dropdownBoxBottomShape1 = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2444,13 +2510,14 @@
 				x: ICON_SIZE + 5 * PADDING_X,
 				y: 1.75 * boxHeight + 15
 			})
-			
+			// [6][1][1] pop 'Once' text
 			const dropdownBoxBottomShape1Text = Dom.svg('text', {
 			 	class: 'sqd-task-text',
 			 			x: ICON_SIZE + 5 * PADDING_X,
 			 			y: 2.25 * boxHeight,
 			 		});	
 			dropdownBoxBottomShape1Text.textContent = 'Once'
+			// [6][1][2] pop 'Once' cover
 			const dropdownBoxBottomShape1cover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2462,9 +2529,11 @@
 				
 			})
 			Dom.attrs(dropdownBoxBottomShape1cover,{
-				opacity: 0
+				opacity: 0,
+				id: `dropdownBoxBtnPop1acover${Date.now()}`
 				}
 			)
+			// [6][1][3] pop 'Multiple T' shape
 			const dropdownBoxBottomShape1S = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2474,13 +2543,14 @@
 				x: ICON_SIZE + 5 * PADDING_X,
 				y: 1.75 * boxHeight + 30
 			})
-
+			// [6][1][4] pop 'Multiple T' text
 			const dropdownBoxBottomShape1SText = Dom.svg('text', {
 			 	class: 'sqd-task-text',
 			 			x: ICON_SIZE + 5 * PADDING_X,
 			 			y: 2.6 * boxHeight,
 			 		});				
 			dropdownBoxBottomShape1SText.textContent = 'Multiple T'
+			// [6][1][5] pop 'Multiple T' cover
 			const dropdownBoxBottomShape1Scover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2492,7 +2562,8 @@
 				
 			})
 			Dom.attrs(dropdownBoxBottomShape1Scover,{
-				opacity: 0
+				opacity: 0,
+				id: `dropdownBoxBtnPop1bcover${Date.now()}`
 				}
 			)
 			
@@ -2503,6 +2574,8 @@
 			const gSubDropdownbox1Pop = Dom.svg('g', {
 				class: `sqd-task-group sub-dropdownbox-pop sqd-hidden`
 			});
+
+			// [7][1]
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.insertBefore(dropdownBoxBottomShape,dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapecover)
@@ -2512,8 +2585,7 @@
 
 
 
-
-
+			// [6][1]
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1Text)
 			gSubDropdownbox1Pop.insertBefore(dropdownBoxBottomShape1,dropdownBoxBottomShape1Text)
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1cover)
@@ -2521,30 +2593,48 @@
 			gSubDropdownbox1Pop.insertBefore(dropdownBoxBottomShape1S,dropdownBoxBottomShape1SText)
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1Scover)
 			
+			// //testing 
+			// gSubDropdownbox.appendChild(dropdownRightButton)
+			// gSubDropdownbox1.appendChild(dropdownRightButton1)
+			// gSubDropdownbox.insertBefore(dropdownBoxShape, dropdownRightButton)
+			// gSubDropdownbox1.insertBefore(dropdownBoxShape1, dropdownRightButton1)
+			// gSubDropdownbox.appendChild(dropdownBoxInnerText)
+			// gSubDropdownbox1.appendChild(dropdownBoxInnerText1)
+			// gSubDropdownbox.appendChild(dropdownBoxShapeAfter)
+			// gSubDropdownbox1.appendChild(dropdownBoxShape1After)
 
-
-			//testing 
+			// [7][0]
 			gSubDropdownbox.appendChild(dropdownRightButton)
-			gSubDropdownbox1.appendChild(dropdownRightButton1)
 			gSubDropdownbox.insertBefore(dropdownBoxShape, dropdownRightButton)
-			gSubDropdownbox1.insertBefore(dropdownBoxShape1, dropdownRightButton1)
-			gSubDropdownbox.appendChild(dropdownBoxInnerText)
-			gSubDropdownbox1.appendChild(dropdownBoxInnerText1)
+			gSubDropdownbox.appendChild(dropdownBoxInnerTexta)
+			gSubDropdownbox.appendChild(dropdownBoxInnerTextb)
 			gSubDropdownbox.appendChild(dropdownBoxShapeAfter)
+
+
+			// [6][0]
+			gSubDropdownbox1.appendChild(dropdownRightButton1)
+			gSubDropdownbox1.insertBefore(dropdownBoxShape1, dropdownRightButton1)
+			gSubDropdownbox1.appendChild(dropdownBoxInnerText1a)
+			gSubDropdownbox1.appendChild(dropdownBoxInnerText1b)
 			gSubDropdownbox1.appendChild(dropdownBoxShape1After)
+
+			// [7]
 			gSubDropdown.appendChild(gSubDropdownbox)
 			gSubDropdown.appendChild(gSubDropdownboxPop)
 
+			// [6]
 			gSubDropdown1.appendChild(gSubDropdownbox1)
 			gSubDropdown1.appendChild(gSubDropdownbox1Pop)
-			// gDropdown.appendChild(gSubDropdown)
-			// gDropdown.appendChild(gSubDropdown1)
+
 			g.appendChild(icon);
 			g.appendChild(moreIcon);
 			g.appendChild(gRightPop3)
+			// dropdown part
 			g.appendChild(gDropdown)
-			g.appendChild(gSubDropdown1)
-			g.appendChild(gSubDropdown)
+			// subdropdown part
+			g.appendChild(gSubDropdown1)  // [6] 下方
+			g.appendChild(gSubDropdown)  // [7] 上方
+
 			const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
 			const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
 			const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
@@ -3466,7 +3556,9 @@
 			if (clickedStep) {
 				this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
 				const fakeThis = this.context 
-				//switch step pop
+				console.log(3516, clickedStep.view.g.childNodes)
+
+				//switch step pop(if else block)
 				if(clickedStep.step.componentType === 'switch'){
 					//click right popout
 					if(clickedStep.view.g.childNodes[13].childNodes[3].id){
@@ -3498,9 +3590,10 @@
 							clickedStep.view.g.childNodes[17].classList.toggle('sqd-hidden');
 						}
 					}
-					//subdropdown
-					if(clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].id){
-						const dropdownButId = clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].id.toString();
+
+					//show subdropdown
+					if(clickedStep.view.g.childNodes[17].childNodes[1]){
+						const dropdownButId = clickedStep.view.g.childNodes[17].childNodes[0].childNodes[4].id.toString();
 						const dropdownBut = document.getElementById(dropdownButId);
 						dropdownBut.onclick = function(e){
 							console.log(3498, clickedStep.view.g.childNodes[17].childNodes)
@@ -3508,13 +3601,91 @@
 							clickedStep.view.g.childNodes[17].childNodes[1].classList.toggle('sqd-hidden');
 						}
 					}
-					if(clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].id){
-						const dropdownButId = clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].id.toString();
+					//set subdropdown
+					if(clickedStep.view.g.childNodes[17].childNodes[1]){
+						// select Once
+						const subDropdownBtnpopIda = clickedStep.view.g.childNodes[17].childNodes[1].childNodes[2].id.toString();
+						const subDropdownBtnpopa = document.getElementById(subDropdownBtnpopIda);
+						subDropdownBtnpopa.onclick = function(){
+							console.log(3296, 'clicked Any List', clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].classList)
+							if(clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].classList.length > 1){  // has 'sqd-hidden' in class
+								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
+							} 
+							else{
+								// add 'sqd-hidden' for [17][0][3] default text
+								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].classList.add("sqd-hidden");
+								console.log(3303, 'sqd-hidden added', clickedStep.view.g.childNodes[17].childNodes[0].childNodes);
+								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
+							}
+							
+						}
+					}
+					//set subdropdown
+					if(clickedStep.view.g.childNodes[17].childNodes[1]){
+						// select Multiple T
+						const subDropdownBtnpopIdb = clickedStep.view.g.childNodes[17].childNodes[1].childNodes[5].id.toString();
+						const subDropdownBtnpopb = document.getElementById(subDropdownBtnpopIdb);
+						subDropdownBtnpopb.onclick = function(){
+							console.log(3329, 'clicked List A', clickedStep.view.g.childNodes[17].childNodes[0].childNodes[2].classList)
+							if(clickedStep.view.g.childNodes[17].childNodes[0].childNodes[2].classList.length > 1){  // has 'sqd-hidden' in class
+								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
+							} 
+							else{
+								// add 'sqd-hidden' for [17][0][2] default text
+								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[2].classList.add("sqd-hidden");
+								console.log(3340, 'sqd-hidden added', clickedStep.view.g.childNodes[17].childNodes[0].childNodes);
+								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
+							}
+							
+						}
+					}
+
+					//show subdropdown1
+					if(clickedStep.view.g.childNodes[16].childNodes[1]){
+						const dropdownButId = clickedStep.view.g.childNodes[16].childNodes[0].childNodes[4].id.toString();
 						const dropdownBut = document.getElementById(dropdownButId);
 						dropdownBut.onclick = function(e){
 							console.log(3498, clickedStep.view.g.childNodes[16].childNodes)
 							e.stopPropagation();
 							clickedStep.view.g.childNodes[16].childNodes[1].classList.toggle('sqd-hidden');
+						}
+					}
+					//set subdropdown1
+					if(clickedStep.view.g.childNodes[16].childNodes[1]){
+						// select Once
+						const subDropdownBtnpopId1a = clickedStep.view.g.childNodes[16].childNodes[1].childNodes[2].id.toString();
+						const subDropdownBtnpop1a = document.getElementById(subDropdownBtnpopId1a);
+						subDropdownBtnpop1a.onclick = function(){
+							console.log(3303, 'clicked Once', clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].classList)
+							if(clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].classList.length > 1){  // has 'sqd-hidden' in class
+								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
+							} 
+							else{
+								// add 'sqd-hidden' for [16][0][3] default text
+								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].classList.add("sqd-hidden");
+								console.log(3322, 'sqd-hidden added', clickedStep.view.g.childNodes[16].childNodes[0].childNodes);
+								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
+							}
+							
+						}
+					}
+					//set subdropdown1
+					if(clickedStep.view.g.childNodes[16].childNodes[1]){
+						// select Multiple T
+						const subDropdownBtnpopId1b = clickedStep.view.g.childNodes[16].childNodes[1].childNodes[5].id.toString();
+						const subDropdownBtnpop1b = document.getElementById(subDropdownBtnpopId1b);
+						subDropdownBtnpop1b.onclick = function(){
+							console.log(3329, 'clicked Multiple T', clickedStep.view.g.childNodes[16].childNodes[0].childNodes[2].classList)
+							if(clickedStep.view.g.childNodes[16].childNodes[0].childNodes[2].classList.length > 1){  // has 'sqd-hidden' in class
+								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
+							} 
+							else{
+								// add 'sqd-hidden' for [16][0][2] default text
+								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[2].classList.add("sqd-hidden");
+								console.log(3340, 'sqd-hidden added', clickedStep.view.g.childNodes[16].childNodes[0].childNodes);
+								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
+							}
+							
 						}
 					}
 				}
@@ -3527,6 +3698,7 @@
 				
 				if(clickedStep.step.componentType === 'task'){
 					//right popout delete button
+					console.log(3577, clickedStep.view.g.childNodes);
 					if(clickedStep.view.g.childNodes[4].childNodes[1]){
 						const deleteButtonId = clickedStep.view.g.childNodes[4].childNodes[1].id.toString();
 						const deleteButton = document.getElementById(deleteButtonId)
@@ -3555,23 +3727,101 @@
 							clickedStep.view.g.childNodes[7].classList.toggle('sqd-hidden');
 						}
 					}
+
 					//show subdropdown
 					if(clickedStep.view.g.childNodes[7].childNodes[1]){
-						const subDropdownButtonId = clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].id.toString();
+						const subDropdownButtonId = clickedStep.view.g.childNodes[7].childNodes[0].childNodes[4].id.toString();
 						const subDropdownButton = document.getElementById(subDropdownButtonId);
 						subDropdownButton.onclick = function(){
 							console.log(3562, clickedStep.view.g.childNodes[7])
 							clickedStep.view.g.childNodes[7].childNodes[1].classList.toggle('sqd-hidden');
 						}
 					}
+					//set subdropdown
+					if(clickedStep.view.g.childNodes[7].childNodes[1]){
+						// select Once
+						const subDropdownBtnpopIda = clickedStep.view.g.childNodes[7].childNodes[1].childNodes[2].id.toString();
+						const subDropdownBtnpopa = document.getElementById(subDropdownBtnpopIda);
+						subDropdownBtnpopa.onclick = function(){
+							console.log(3296, 'clicked Any List', clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].classList)
+							if(clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].classList.length > 1){  // has 'sqd-hidden' in class
+								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
+							} 
+							else{
+								// add 'sqd-hidden' for [7][0][3] default text
+								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].classList.add("sqd-hidden");
+								console.log(3303, 'sqd-hidden added', clickedStep.view.g.childNodes[7].childNodes[0].childNodes);
+								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
+							}
+							
+						}
+					}
+					//set subdropdown
+					if(clickedStep.view.g.childNodes[7].childNodes[1]){
+						// select Multiple T
+						const subDropdownBtnpopIdb = clickedStep.view.g.childNodes[7].childNodes[1].childNodes[5].id.toString();
+						const subDropdownBtnpopb = document.getElementById(subDropdownBtnpopIdb);
+						subDropdownBtnpopb.onclick = function(){
+							console.log(3329, 'clicked List A', clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList)
+							if(clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList.length > 1){  // has 'sqd-hidden' in class
+								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
+							} 
+							else{
+								// add 'sqd-hidden' for [7][0][2] default text
+								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList.add("sqd-hidden");
+								console.log(3340, 'sqd-hidden added', clickedStep.view.g.childNodes[7].childNodes[0].childNodes);
+								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
+							}
+							
+						}
+					}
+
 					//show subdropdown1
 					if(clickedStep.view.g.childNodes[6].childNodes[1]){
-						const subDropdownButtonId1 = clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].id.toString();
+						const subDropdownButtonId1 = clickedStep.view.g.childNodes[6].childNodes[0].childNodes[4].id.toString();
 						const subDropdownButton1 = document.getElementById(subDropdownButtonId1);
 						subDropdownButton1.onclick = function(){
 							clickedStep.view.g.childNodes[6].childNodes[1].classList.toggle('sqd-hidden');
 						}	
 
+					}
+					//set subdropdown1
+					if(clickedStep.view.g.childNodes[6].childNodes[1]){
+						// select Once
+						const subDropdownBtnpopId1a = clickedStep.view.g.childNodes[6].childNodes[1].childNodes[2].id.toString();
+						const subDropdownBtnpop1a = document.getElementById(subDropdownBtnpopId1a);
+						subDropdownBtnpop1a.onclick = function(){
+							console.log(3303, 'clicked Once', clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].classList)
+							if(clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].classList.length > 1){  // has 'sqd-hidden' in class
+								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
+							} 
+							else{
+								// add 'sqd-hidden' for [6][0][3] default text
+								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].classList.add("sqd-hidden");
+								console.log(3322, 'sqd-hidden added', clickedStep.view.g.childNodes[6].childNodes[0].childNodes);
+								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
+							}
+							
+						}
+					}
+					//set subdropdown1
+					if(clickedStep.view.g.childNodes[6].childNodes[1]){
+						// select Multiple T
+						const subDropdownBtnpopId1b = clickedStep.view.g.childNodes[6].childNodes[1].childNodes[5].id.toString();
+						const subDropdownBtnpop1b = document.getElementById(subDropdownBtnpopId1b);
+						subDropdownBtnpop1b.onclick = function(){
+							console.log(3329, 'clicked Multiple T', clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList)
+							if(clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList.length > 1){  // has 'sqd-hidden' in class
+								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
+							} 
+							else{
+								// add 'sqd-hidden' for [6][0][2] default text
+								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList.add("sqd-hidden");
+								console.log(3340, 'sqd-hidden added', clickedStep.view.g.childNodes[6].childNodes[0].childNodes);
+								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
+							}
+							
+						}
 					}
 				}
 			} else {
