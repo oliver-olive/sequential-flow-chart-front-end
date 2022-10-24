@@ -1601,6 +1601,7 @@
 					width: ICON_SIZE,
 					height: ICON_SIZE
 				 });
+				 //add 3 icons
 				 const iconUrl1 = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
 				 // // add click event for icon
 					  const icon1 = iconUrl1
@@ -1820,8 +1821,6 @@
 				opacity: 0
 				}
 			)
-
-
 			const dropdownBoxBottomShapeS = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2191,7 +2190,7 @@
 					height: ICON_SIZE
 				 });
 			 	const iconUrl1 = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
-			// // add click event for icon
+			// add 3 icons
 			 	const icon1 = iconUrl1
 			 	? Dom.svg('image', {
 			 			href: iconUrl1
@@ -2249,6 +2248,7 @@
 			const gRightPop3 = Dom.svg('g', {
 				class: `sqd-task-group right-popup sqd-hidden Collapsed`
 			});
+			//add reminder prompt
 			const gRightPop3Reminder = Dom.svg('g', {
 				class: `sqd-task-group right-popup-reminder`
 			});
@@ -2348,14 +2348,120 @@
 			gRightPop3Reminder.appendChild(gRightPop3Reminder2)
 			gRightPop3Reminder.appendChild(gRightPop3Reminder3)
 
-
-
-
-
-
 			gRightPop3.appendChild(icon1)
 			gRightPop3.appendChild(icon2)
 			gRightPop3.appendChild(icon3)
+			//add delete dropdown
+			const deleteDropdown = Dom.svg('g', {
+				class: `sqd-task-group deletedropdown sqd-hidden Collapsed`
+			});
+			const deleteDropdownText = Dom.svg('text', {
+				class: 'sqd-task-text',
+						x:10,
+						y: 1.3 * boxHeight ,
+					});
+				Dom.attrs(deleteDropdownText, {
+						//class: 'sqd-hidden',
+						id:`deleteDropdownText${Date.now()}`
+					})
+
+			deleteDropdownText.textContent = 'Are you sure to delete?'
+			const rectDelete = Dom.svg('rect', {
+				x: 0.5,
+				y: boxHeight,
+				class: 'sqd-task-rect',
+				width: boxWidth,
+				height: 2 * boxHeight,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			
+			const rectDeleteYes = Dom.svg('rect', {
+				x: 15,
+				y: boxHeight * 1.8,
+				class: 'sqd-task-rect',
+				width: 50,
+				height: 25,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			const rectDeleteYesText = Dom.svg('text', {
+				class: 'sqd-task-text',
+						x: 30 ,
+						y: boxHeight * 2.1 ,
+					});
+				Dom.attrs(rectDeleteYesText, {
+						//class: 'sqd-hidden',
+						id:`rectDeleteYesText${Date.now()}`
+					})
+
+			rectDeleteYesText.textContent = 'Yes'
+			const rectDeleteYesCover = Dom.svg('rect', {
+				x: 15,
+				y: boxHeight * 1.8,
+				class: 'option select-field choice',
+				width: 50,
+				height: 25,
+				fill: "#fff",
+				stroke: "#a0a0a0",
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS,
+				id:`rectDeleteYesCover${Date.now()}`
+			});
+			Dom.attrs(
+				rectDeleteYesCover, {
+					opacity: 0.3
+				}
+
+			)	
+			const rectDeleteNo = Dom.svg('rect', {
+				x: 85,
+				y: boxHeight * 1.8,
+				class: 'sqd-task-rect',
+				width: 50,
+				height: 25,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			const rectDeleteNoText = Dom.svg('text', {
+				class: 'sqd-task-text',
+						x: 100,
+						y: boxHeight * 2.1,
+					});
+				Dom.attrs(rectDeleteNoText, {
+						//class: 'sqd-hidden',
+						id:`rectDeleteNoText${Date.now()}`
+					})
+			const rectDeleteNoCover = Dom.svg('rect', {
+				x: 85,
+				y: boxHeight * 1.8,
+				class: 'option select-field choice',
+				width: 50,
+				height: 25,
+				fill: "#fff",
+				stroke: "#a0a0a0",
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS,
+				id:`rectDeleteNoCover${Date.now()}`
+			});
+			Dom.attrs(
+				rectDeleteNoCover, {
+					opacity: 0.3
+				}
+
+			)	
+			rectDeleteNoText.textContent = 'No'
+			deleteDropdown.appendChild(deleteDropdownText)
+			deleteDropdown.insertBefore(rectDelete, deleteDropdownText)
+			deleteDropdown.appendChild(rectDeleteYesText)
+			deleteDropdown.insertBefore(rectDeleteYes, rectDeleteYesText)
+			deleteDropdown.appendChild(rectDeleteYesCover)
+			deleteDropdown.appendChild(rectDeleteNoText)
+			deleteDropdown.insertBefore(rectDeleteNo, rectDeleteNoText)
+			deleteDropdown.appendChild(rectDeleteNoCover)
+
+
+			//add dropdown
 			const gDropdown = Dom.svg('g', {
 				class: `sqd-task-group dropdown sqd-hidden Collapsed`
 			});
@@ -2502,7 +2608,7 @@
 				height: 15,
 				class: 'option select-field choice',
 				fill: "#fff",
-				//stroke: "#a0a0a0",
+				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
 				y: 1.2 * boxHeight + 15,
 				id:`dropdownBoxBottomShapecover${Date.now()}`
@@ -2657,6 +2763,7 @@
 			g.appendChild(gSubDropdown1)
 			g.appendChild(gSubDropdown)
 			g.appendChild(gRightPop3Reminder);
+			g.appendChild(deleteDropdown);
 			const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
 			const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
 			const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
@@ -3642,8 +3749,9 @@
 					if(clickedStep.view.g.childNodes[4].childNodes[1]){
 						const deleteButtonId = clickedStep.view.g.childNodes[4].childNodes[1].id.toString();
 						const deleteButton = document.getElementById(deleteButtonId)
+						//add mouseover event
 						deleteButton.addEventListener('mouseover', function() {
-							//console.log(3646, 'mouseover')
+							//console.log(3752, clickedStep.view.g.childNodes)
 							clickedStep.view.g.childNodes[8].childNodes[2].classList.remove('sqd-hidden');
 						})
 						deleteButton.addEventListener('mouseout', function() {
@@ -3651,9 +3759,23 @@
 							clickedStep.view.g.childNodes[8].childNodes[2].classList.add('sqd-hidden');
 						})
 						deleteButton.onclick = function(){
-								fakeThis.tryDeleteStep(clickedStep.step, 2);
+							clickedStep.view.g.childNodes[9].classList.toggle('sqd-hidden')
+							//fakeThis.tryDeleteStep(clickedStep.step, 2);
 						}
-						
+						const deleteButtonYesId = clickedStep.view.g.childNodes[9].childNodes[4].id.toString()
+						const deleteButtonYes = document.getElementById(deleteButtonYesId)
+						const deleteButtonNoId = clickedStep.view.g.childNodes[9].childNodes[7].id.toString()
+						const deleteButtonNo = document.getElementById(deleteButtonNoId)
+						console.log(3766, deleteButtonYesId, deleteButtonNoId)
+						deleteButtonYes.onclick = function() {
+							console.log('3769', 'this is clicked')
+							fakeThis.tryDeleteStep(clickedStep.step, 2);
+							
+						}
+						deleteButtonNo.onclick = function() {
+							//console.log(3775, 'deleted')
+							clickedStep.view.g.childNodes[9].classList.add('sqd-hidden')
+						}
 					}
 					//click right popout
 					if(clickedStep.view.g.childNodes[3]){
@@ -3667,6 +3789,7 @@
 					//show dropdown
 					if(clickedStep.view.g.childNodes[4].childNodes[2].id){
 						const dropdownButId = clickedStep.view.g.childNodes[4].childNodes[2].id.toString();
+						//add mouseover event
 						const dropdownBut = document.getElementById(dropdownButId);
 						dropdownBut.addEventListener('mouseover', function() {
 							clickedStep.view.g.childNodes[8].childNodes[0].classList.remove('sqd-hidden');
@@ -3680,6 +3803,7 @@
 							clickedStep.view.g.childNodes[5].classList.toggle('sqd-hidden');
 							clickedStep.view.g.childNodes[6].classList.toggle('sqd-hidden');
 							clickedStep.view.g.childNodes[7].classList.toggle('sqd-hidden');
+							clickedStep.view.g.childNodes[9].classList.add('sqd-hidden');
 						}
 					}
 					//show subdropdown
