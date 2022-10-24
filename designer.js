@@ -1015,6 +1015,43 @@
 				placeholders.push(appendPlaceholder(g, maxJoinX - PH_WIDTH / 2, offsetY - PH_HEIGHT));
 				Dom.translate(components[i].view.g, offsetX, offsetY);
 				offsetY += components[i].view.height + PH_HEIGHT;
+				// console.log(1035,components[i])
+				// const rect = Dom.svg('rect', {
+				// 	x: offsetX,
+				// 	y: offsetY - PH_HEIGHT,
+				// 	class: 'sqd-task-rect',
+				// 	width: 150,
+				// 	height: 42* 2,
+				// 	rx: RECT_RADIUS,
+				// 	ry: RECT_RADIUS
+				// });
+				// Dom.attrs(rect, {
+				// 	class: 'sqd-hidden',
+				// 	id:`dropdown${Date.now()}`
+				// })
+				// const nameText = Dom.svg('text', {
+				// 	class: 'sqd-task-text',
+				// 	x: maxJoinX - components[i].view.joinX + 10,
+				// 	y: offsetY - PH_HEIGHT + 30,
+				// });
+				// Dom.attrs(nameText, {
+				// 	class: 'sqd-hidden',
+				// 	id:`dropdownword${Date.now()}`
+				// })
+				// const nameText1 = Dom.svg('text', {
+				// 	class: 'sqd-task-text',
+				// 	x: maxJoinX - components[i].view.joinX + 10,
+				// 	y: offsetY - PH_HEIGHT + 50,
+				// });
+				// Dom.attrs(nameText1, {
+				// 	class: 'sqd-hidden',
+				// 	id:`dropdownword${Date.now()}`
+				// })
+				// nameText.textContent = 'Select List:';
+				// nameText1.textContent = 'Run:';
+				// g.appendChild(nameText)
+				// g.appendChild(nameText1)
+				// g.insertBefore(rect, nameText);
 			}			
 			
 			/* Add placeholder & stop sign to the BOTTOM of last component 
@@ -1030,12 +1067,42 @@
 				g.appendChild(stop);
 			}
 
-			let containsSwitch;
+			
 			for (i = 0; i < components.length; i++) {
+				// 这里添加dropdown!
+				// console.log(1035,components[i])
+				// const rect = Dom.svg('rect', {
+				// 	x: maxJoinX - components[i].view.joinX,
+				// 	y: components[i].view.height + PH_HEIGHT,
+				// 	class: 'sqd-task-rect',
+				// 	width: 150,
+				// 	height: 42* 2,
+				// 	rx: RECT_RADIUS,
+				// 	ry: RECT_RADIUS
+				// });
+				// Dom.attrs(rect, {
+				// 	id:`dropdown${Date.now()}`
+				// })
+				// const nameText = Dom.svg('text', {
+				// 	class: 'sqd-task-text',
+				// 	x: maxJoinX - components[i].view.joinX + 10,
+				// 	y: offsetY - PH_HEIGHT + 30,
+				// });
+				// const nameText1 = Dom.svg('text', {
+				// 	class: 'sqd-task-text',
+				// 	x: maxJoinX - components[i].view.joinX + 10,
+				// 	y: offsetY - PH_HEIGHT + 50,
+				// });
+				// nameText.textContent = 'Select List:';
+				// nameText1.textContent = 'Run:';
+				// g.appendChild(nameText)
+				// g.appendChild(nameText1)
+				// g.insertBefore(rect, nameText);
+				
 				// Modify switch components
 				if (components[i] instanceof SwitchStepComponent) {
 					JoinView.createStraightJoin(g, new Vector(maxJoinX, 0), PH_HEIGHT);
-					containsSwitch = 1;
+					
 					// If there is one or more blocks below if/else,
 					// move them to the end of true branch
 					while (components[i+1]) {
@@ -1048,27 +1115,7 @@
 					}
 				} 
 			}
-			// Hide start component, and placeholder & line below it
-			if (components.length > 0 && components[0].step.id == 'start-component') {
-				
-				Dom.attrs(placeholders[0], {
-					display: 'none'
-				});
-				const lines = parent.childNodes[0].childNodes;
-				
-				if (components.length == 1){
-					parent.childNodes[0].removeChild(lines[1]);
-				}
-				else {
-					// console.log(lines);
-					parent.childNodes[0].removeChild(lines[components.length]);
-					if (containsSwitch){
-						parent.childNodes[0].removeChild(lines[0]);
-					}
-				}
-				// console.log(document.getElementsByClassName("sqd-input")[0]);
-				document.getElementsByClassName("sqd-input")[0].setAttribute("display","none");
-			}
+			
 			return new SequenceComponentView(g, maxWidth, offsetY, maxJoinX, placeholders, components);
 		}
 		getClientPosition() {
@@ -1700,34 +1747,18 @@
 					});		
 			dropdownRightButton.textContent = "▼";
 			dropdownRightButton1.textContent = "▼";
-			// [17][0][2] default text
-			const dropdownBoxInnerTexta = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
+			const dropdownBoxInnerText = Dom.svg('text', {
+				class: 'sqd-task-text',
 						x: containerWidths[0] - 5,
 						y: 1.85 * boxHeight,
 					});
-			dropdownBoxInnerTexta.textContent = 'Any list';
-			// [17][0][3] default text
-			const dropdownBoxInnerTextb = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
-						x: containerWidths[0] - 5,
-						y: 1.85 * boxHeight,
-					});
-			dropdownBoxInnerTextb.textContent = 'List A';
-			// [16][0][2] default text
-			const dropdownBoxInnerText1a = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
+			dropdownBoxInnerText.textContent = 'Any list';
+			const dropdownBoxInnerText1 = Dom.svg('text', {
+				class: 'sqd-task-text',
 						x: containerWidths[0] - 5,
 						y: 2.35 * boxHeight,
 					});
-			dropdownBoxInnerText1a.textContent = 'Once';
-			// [16][0][3] default text
-			const dropdownBoxInnerText1b = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
-						x: containerWidths[0] - 5,
-						y: 2.35 * boxHeight,
-					});
-			dropdownBoxInnerText1b.textContent = 'Multiple T';
+			dropdownBoxInnerText1.textContent = 'Once';
 			const dropdownBoxShapeAfter = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1757,7 +1788,6 @@
 			}
 			)
 			
-			// [17][1][0] Any list
 			const dropdownBoxBottomShape = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1768,14 +1798,12 @@
 				y: 1.7 * boxHeight + 15
 				
 			})
-			// [17][1][1] Any list
 			const dropdownBoxBottomShapeText = Dom.svg('text', {
 				class: 'sqd-task-text',
 						x: containerWidths[0] - 5,
 						y: 1.85 * boxHeight + 15
 					});
 			dropdownBoxBottomShapeText.textContent = 'Any list'
-			// [17][1][2] Any list with id
 			const dropdownBoxBottomShapecover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1783,15 +1811,17 @@
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: containerWidths[0] - 5,
-				y: 1.7 * boxHeight + 15
+				y: 1.7 * boxHeight + 15,
+				id: `dropdownBoxBottomShapecover${Date.now()}`
+
 				
 			})
 			Dom.attrs(dropdownBoxBottomShapecover,{
-				opacity: 0,
-				id: `ifdropdownBoxBtnPopacover${Date.now()}`
+				opacity: 0
 				}
 			)
-			// [17][1][3] List A
+
+
 			const dropdownBoxBottomShapeS = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1802,14 +1832,12 @@
 				y: 1.7 * boxHeight + 30
 				
 			})
-			// [17][1][4] List A
 			const dropdownBoxBottomShapeSText = Dom.svg('text', {
 				class: 'sqd-task-text',
 						x: containerWidths[0] - 5,
 						y: 2.2 * boxHeight + 15,
 					});
 			dropdownBoxBottomShapeSText.textContent = 'List A'
-			// [17][1][5] List A with id
 			const dropdownBoxBottomShapeScover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1817,16 +1845,15 @@
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: containerWidths[0] - 5,
-				y: 1.7 * boxHeight + 30
+				y: 1.7 * boxHeight + 30,
+				id: `dropdownBoxBottomShapeScover${Date.now()}`
 				
 			})
 			Dom.attrs(dropdownBoxBottomShapeScover,{
-				opacity: 0,
-				id: `ifdropdownBoxBtnPopbcover${Date.now()}`
+				opacity: 0
 				}
 			)
 			
-			// [16][1][0] Once
 			const dropdownBoxBottomShape1 = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1836,14 +1863,13 @@
 				x: containerWidths[0] - 5,
 				y: 2.2 * boxHeight + 15
 			})
-			// [16][1][1] Once
+			
 			const dropdownBoxBottomShape1Text = Dom.svg('text', {
 			 	class: 'sqd-task-text',
 			 			x: containerWidths[0] - 5,
 			 			y:2.35 * boxHeight + 15,
 			 		});	
 			dropdownBoxBottomShape1Text.textContent = 'Once'
-			// [16][1][2] Once with id
 			const dropdownBoxBottomShape1cover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1851,15 +1877,14 @@
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: containerWidths[0] - 5,
-				y: 2.2 * boxHeight + 15
+				y: 2.2 * boxHeight + 15,
+				id:`dropdownBoxBottomShape1cover${Date.now()}`
 				
 			})
 			Dom.attrs(dropdownBoxBottomShape1cover,{
-				opacity: 0,
-				id: `ifdropdownBoxBtnPop1acover${Date.now()}`
+				opacity: 0
 				}
 			)
-			// [16][1][3] Multiple T
 			const dropdownBoxBottomShape1S = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -1869,27 +1894,26 @@
 				x: containerWidths[0] - 5,
 				y: 2.2 * boxHeight + 30
 			})
-			// [16][1][4] Multiple T
+
 			const dropdownBoxBottomShape1SText = Dom.svg('text', {
 			 	class: 'sqd-task-text',
 			 			x: containerWidths[0] - 5,
 			 			y: 2.35 * boxHeight + 30,
 			 		});				
-			dropdownBoxBottomShape1SText.textContent = 'Multiple T'
-			// [16][1][5] Multiple T with id
+			dropdownBoxBottomShape1SText.textContent = 'Multiple '
 			const dropdownBoxBottomShape1Scover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
 				class: 'option select-field',
 				fill: "#fff",
 				stroke: "#a0a0a0",
-				x: containerWidths[0] - 5,
-				y: 2.2 * boxHeight + 30
+				x: ICON_SIZE + 5 * PADDING_X,
+				y: 2.2 * boxHeight + 30,
+				id:`dropdownBoxBottomShape1Scover${Date.now()}`
 				
 			})
 			Dom.attrs(dropdownBoxBottomShape1Scover,{
-				opacity: 0,
-				id: `ifdropdownBoxBtnPop1bcover${Date.now()}`
+				opacity: 0
 				}
 			)
 			
@@ -1900,8 +1924,6 @@
 			const gSubDropdownbox1Pop = Dom.svg('g', {
 				class: `sqd-task-group sub-dropdownbox-pop sqd-hidden`
 			});
-
-			//[17][1]
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.insertBefore(dropdownBoxBottomShape,dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapecover)
@@ -1909,7 +1931,6 @@
 			gSubDropdownboxPop.insertBefore(dropdownBoxBottomShapeS,dropdownBoxBottomShapeSText)
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapeScover)
 
-			// [16][1]
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1Text)
 			gSubDropdownbox1Pop.insertBefore(dropdownBoxBottomShape1,dropdownBoxBottomShape1Text)
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1cover)
@@ -1917,25 +1938,17 @@
 			gSubDropdownbox1Pop.insertBefore(dropdownBoxBottomShape1S,dropdownBoxBottomShape1SText)
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1Scover)
 
-			// [17][0]
 			gSubDropdownbox.appendChild(dropdownRightButton)
 			gSubDropdownbox.insertBefore(dropdownBoxShape, dropdownRightButton)
-			gSubDropdownbox.appendChild(dropdownBoxInnerTexta)
-			gSubDropdownbox.appendChild(dropdownBoxInnerTextb)
+			gSubDropdownbox.appendChild(dropdownBoxInnerText)
 			gSubDropdownbox.appendChild(dropdownBoxShapeAfter)
-
-			// [17]
 			gSubDropdown.appendChild(gSubDropdownbox)
 			gSubDropdown.appendChild(gSubDropdownboxPop)
 
-			// [16][0]
 			gSubDropdownbox1.appendChild(dropdownRightButton1)
 			gSubDropdownbox1.insertBefore(dropdownBoxShape1, dropdownRightButton1)
-			gSubDropdownbox1.appendChild(dropdownBoxInnerText1a)
-			gSubDropdownbox1.appendChild(dropdownBoxInnerText1b)
+			gSubDropdownbox1.appendChild(dropdownBoxInnerText1)
 			gSubDropdownbox1.appendChild(dropdownBoxShape1After)
-
-			// [16]
 			gSubDropdown1.appendChild(gSubDropdownbox1)
 			gSubDropdown1.appendChild(gSubDropdownbox1Pop)
 
@@ -1946,11 +1959,9 @@
 			g1.appendChild(moreIcon);
 			g.appendChild(g1);
 			g.appendChild(gRightPop3);
-			// dropdown part
 			g.appendChild(gDropdown)
-			// subdropdown part
-			g.appendChild(gSubDropdown1)  //[16] 下方
-			g.appendChild(gSubDropdown)  //[17] 上方
+			g.appendChild(gSubDropdown1)
+			g.appendChild(gSubDropdown)
 
 			JoinView.createStraightJoin(g, new Vector(containerWidths[0], 0), PADDING_TOP + boxHeight);
 			//const iconUrl = configuration.iconUrlProvider ? configuration.iconUrlProvider(step.componentType, step.type) : null;
@@ -2101,7 +2112,6 @@
 		}
 	}
 
-	// task blocks
 	const PADDING_X = 12;
 	const PADDING_Y = 10;
 	const MIN_TEXT_WIDTH = 70;
@@ -2239,6 +2249,110 @@
 			const gRightPop3 = Dom.svg('g', {
 				class: `sqd-task-group right-popup sqd-hidden Collapsed`
 			});
+			const gRightPop3Reminder = Dom.svg('g', {
+				class: `sqd-task-group right-popup-reminder`
+			});
+			const gRightPop3Reminder1 = Dom.svg('g', {
+				class: `sqd-task-group right-popup-reminder sqd-hidden`
+			});
+			const gRightPop3Reminder2 = Dom.svg('g', {
+				class: `sqd-task-group right-popup-reminder sqd-hidden`
+			});
+			const gRightPop3Reminder3 = Dom.svg('g', {
+				class: `sqd-task-group right-popup-reminder sqd-hidden`
+			});
+			const reminder1 = Dom.svg('rect', {
+				x: 0.5,
+				y: 0.5,
+				class: 'sqd-task-rect',
+				width: 50,
+				height: 25,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			Dom.attrs(reminder1, {
+				id: `reminder1${Date.now()}`,
+				x: ICON_SIZE + 3 * PADDING_X + textWidth + 62,
+				y: PADDING_Y - 35,
+			}
+			)
+			const reminderText1 = Dom.svg('text', {
+				class: 'sqd-task-text',
+						x: ICON_SIZE + 3 * PADDING_X + textWidth + 62 + 12.5,
+						y: PADDING_Y - 23,
+					});
+				Dom.attrs(reminderText1, {
+						//class: 'sqd-hidden',
+						id:`reminderText${Date.now()}`
+					})
+			reminderText1.textContent = "Edit"
+			const reminder2 = Dom.svg('rect', {
+				x: 0.5,
+				y: 0.5,
+				class: 'sqd-task-rect',
+				width: 50,
+				height: 25,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			Dom.attrs(reminder2, {
+				id: `reminder2${Date.now()}`,
+				x: ICON_SIZE + 3 * PADDING_X + textWidth + 80,
+				y: PADDING_Y,
+			}
+			)
+
+			const reminderText2 = Dom.svg('text', {
+				class: 'sqd-task-text',
+						x: ICON_SIZE + 3 * PADDING_X + textWidth + 80 + 10,
+						y: PADDING_Y + 12,
+					});
+				Dom.attrs(reminderText2, {
+						//class: 'sqd-hidden',
+						id:`reminderText2${Date.now()}`
+					})
+			reminderText2.textContent = "Copy"
+			const reminder3 = Dom.svg('rect', {
+				x: 0.5,
+				y: 0.5,
+				class: 'sqd-task-rect',
+				width: 50,
+				height: 25,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			Dom.attrs(reminder3, {
+				id: `reminder3${Date.now()}`,
+				x: ICON_SIZE + 3 * PADDING_X + textWidth + 62,
+				y: PADDING_Y + 35,
+			}
+			)
+
+			const reminderText3 = Dom.svg('text', {
+				class: 'sqd-task-text',
+						x: ICON_SIZE + 3 * PADDING_X + textWidth + 62 + 7,
+						y: PADDING_Y + 47,
+					});
+				Dom.attrs(reminderText3, {
+						//class: 'sqd-hidden',
+						id:`reminderText3${Date.now()}`
+					})
+			reminderText3.textContent = "Delete"
+			gRightPop3Reminder1.appendChild(reminderText1)
+			gRightPop3Reminder1.insertBefore(reminder1, reminderText1)
+			gRightPop3Reminder2.appendChild(reminderText2)
+			gRightPop3Reminder2.insertBefore(reminder2, reminderText2)
+			gRightPop3Reminder3.appendChild(reminderText3)
+			gRightPop3Reminder3.insertBefore(reminder3, reminderText3)
+			gRightPop3Reminder.appendChild(gRightPop3Reminder1)
+			gRightPop3Reminder.appendChild(gRightPop3Reminder2)
+			gRightPop3Reminder.appendChild(gRightPop3Reminder3)
+
+
+
+
+
+
 			gRightPop3.appendChild(icon1)
 			gRightPop3.appendChild(icon2)
 			gRightPop3.appendChild(icon3)
@@ -2326,35 +2440,18 @@
 					});		
 			dropdownRightButton.textContent = "▼";
 			dropdownRightButton1.textContent = "▼";
-			// [7][0][2] default text
-			const dropdownBoxInnerTexta = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
+			const dropdownBoxInnerText = Dom.svg('text', {
+				class: 'sqd-task-text',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 1.35 * boxHeight,
 					});
-			dropdownBoxInnerTexta.textContent = 'Any list';
-			// [7][0][3] default text
-			const dropdownBoxInnerTextb = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
-						x: ICON_SIZE + 5 * PADDING_X,
-						y: 1.35 * boxHeight,
-					});
-			dropdownBoxInnerTextb.textContent = 'List A';
-			// [6][0][2] default text
-			const dropdownBoxInnerText1a = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
+			dropdownBoxInnerText.textContent = 'Any list';
+			const dropdownBoxInnerText1 = Dom.svg('text', {
+				class: 'sqd-task-text',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 1.9 * boxHeight,
 					});
-			dropdownBoxInnerText1a.textContent = 'Once';
-			// [6][0][3] default text
-			const dropdownBoxInnerText1b = Dom.svg('text', {
-				class: 'sqd-task-text sqd-hidden',
-						x: ICON_SIZE + 5 * PADDING_X,
-						y: 1.9 * boxHeight,
-					});
-			dropdownBoxInnerText1b.textContent = 'Multiple T';
-			//
+			dropdownBoxInnerText1.textContent = 'Once';
 			const dropdownBoxShapeAfter = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2383,8 +2480,7 @@
 				opacity: 0
 			}
 			)
-
-			// [7][1][0] pop 'Any List' shape
+			
 			const dropdownBoxBottomShape = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2395,30 +2491,29 @@
 				y: 1.2 * boxHeight + 15
 				
 			})
-			// [7][1][1] pop 'Any List' text
 			const dropdownBoxBottomShapeText = Dom.svg('text', {
 				class: 'sqd-task-text',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 1.7 * boxHeight,
 					});
 			dropdownBoxBottomShapeText.textContent = 'Any list'
-			// [7][1][2] pop 'Any List' cover
 			const dropdownBoxBottomShapecover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field',
+				class: 'option select-field choice',
 				fill: "#fff",
-				stroke: "#a0a0a0",
+				//stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
-				y: 1.2 * boxHeight + 15
+				y: 1.2 * boxHeight + 15,
+				id:`dropdownBoxBottomShapecover${Date.now()}`
 				
 			})
 			Dom.attrs(dropdownBoxBottomShapecover,{
-				opacity: 0,
-				id: `dropdownBoxBtnPopacover${Date.now()}`
+				opacity: 0.3,
 				}
 			)
-			// [7][1][3] pop 'List A' shape
+
+
 			const dropdownBoxBottomShapeS = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2429,31 +2524,28 @@
 				y: 1.2 * boxHeight + 30
 				
 			})
-			// [7][1][4] pop 'List A' text
 			const dropdownBoxBottomShapeSText = Dom.svg('text', {
 				class: 'sqd-task-text',
 						x: ICON_SIZE + 5 * PADDING_X,
 						y: 2.05 * boxHeight,
 					});
 			dropdownBoxBottomShapeSText.textContent = 'List A'
-			// [7][1][5] pop 'List A' cover
 			const dropdownBoxBottomShapeScover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field',
-				fill: "#fff",
+				class: 'option select-field choice',
+				fill: '#fff',
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
-				y: 1.2 * boxHeight + 30
+				y: 1.2 * boxHeight + 30,
+				id:`dropdownBoxBottomShapeScover${Date.now()}`
 				
 			})
 			Dom.attrs(dropdownBoxBottomShapeScover,{
-				opacity: 0,
-				id: `dropdownBoxBtnPopbcover${Date.now()}`
+				opacity: 0.3,
 				}
 			)
 			
-			// [6][1][0] pop 'Once' shape
 			const dropdownBoxBottomShape1 = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2463,30 +2555,28 @@
 				x: ICON_SIZE + 5 * PADDING_X,
 				y: 1.75 * boxHeight + 15
 			})
-			// [6][1][1] pop 'Once' text
+			
 			const dropdownBoxBottomShape1Text = Dom.svg('text', {
 			 	class: 'sqd-task-text',
 			 			x: ICON_SIZE + 5 * PADDING_X,
 			 			y: 2.25 * boxHeight,
 			 		});	
 			dropdownBoxBottomShape1Text.textContent = 'Once'
-			// [6][1][2] pop 'Once' cover
 			const dropdownBoxBottomShape1cover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field',
+				class: 'option select-field choice',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
-				y: 1.75 * boxHeight + 15
+				y: 1.75 * boxHeight + 15,
+				id:`dropdownBoxBottomShape1cover${Date.now()}`
 				
 			})
 			Dom.attrs(dropdownBoxBottomShape1cover,{
-				opacity: 0,
-				id: `dropdownBoxBtnPop1acover${Date.now()}`
+				opacity: 0.3
 				}
 			)
-			// [6][1][3] pop 'Multiple T' shape
 			const dropdownBoxBottomShape1S = Dom.svg('rect', {
 				width: 60,
 				height: 15,
@@ -2496,27 +2586,26 @@
 				x: ICON_SIZE + 5 * PADDING_X,
 				y: 1.75 * boxHeight + 30
 			})
-			// [6][1][4] pop 'Multiple T' text
+
 			const dropdownBoxBottomShape1SText = Dom.svg('text', {
 			 	class: 'sqd-task-text',
 			 			x: ICON_SIZE + 5 * PADDING_X,
 			 			y: 2.6 * boxHeight,
 			 		});				
-			dropdownBoxBottomShape1SText.textContent = 'Multiple T'
-			// [6][1][5] pop 'Multiple T' cover
+			dropdownBoxBottomShape1SText.textContent = 'Multiple '
 			const dropdownBoxBottomShape1Scover = Dom.svg('rect', {
 				width: 60,
 				height: 15,
-				class: 'option select-field',
+				class: 'option select-field choice',
 				fill: "#fff",
 				stroke: "#a0a0a0",
 				x: ICON_SIZE + 5 * PADDING_X,
-				y: 1.75 * boxHeight + 30
+				y: 1.75 * boxHeight + 30,
+				id:`dropdownBoxBottomShape1Scover${Date.now()}`
 				
 			})
 			Dom.attrs(dropdownBoxBottomShape1Scover,{
-				opacity: 0,
-				id: `dropdownBoxBtnPop1bcover${Date.now()}`
+				opacity: 0.3
 				}
 			)
 			
@@ -2527,8 +2616,6 @@
 			const gSubDropdownbox1Pop = Dom.svg('g', {
 				class: `sqd-task-group sub-dropdownbox-pop sqd-hidden`
 			});
-
-			// [7][1]
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.insertBefore(dropdownBoxBottomShape,dropdownBoxBottomShapeText)
 			gSubDropdownboxPop.appendChild(dropdownBoxBottomShapecover)
@@ -2538,7 +2625,8 @@
 
 
 
-			// [6][1]
+
+
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1Text)
 			gSubDropdownbox1Pop.insertBefore(dropdownBoxBottomShape1,dropdownBoxBottomShape1Text)
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1cover)
@@ -2546,48 +2634,29 @@
 			gSubDropdownbox1Pop.insertBefore(dropdownBoxBottomShape1S,dropdownBoxBottomShape1SText)
 			gSubDropdownbox1Pop.appendChild(dropdownBoxBottomShape1Scover)
 			
-			// //testing 
-			// gSubDropdownbox.appendChild(dropdownRightButton)
-			// gSubDropdownbox1.appendChild(dropdownRightButton1)
-			// gSubDropdownbox.insertBefore(dropdownBoxShape, dropdownRightButton)
-			// gSubDropdownbox1.insertBefore(dropdownBoxShape1, dropdownRightButton1)
-			// gSubDropdownbox.appendChild(dropdownBoxInnerText)
-			// gSubDropdownbox1.appendChild(dropdownBoxInnerText1)
-			// gSubDropdownbox.appendChild(dropdownBoxShapeAfter)
-			// gSubDropdownbox1.appendChild(dropdownBoxShape1After)
 
-			// [7][0]
+
+			//testing 
 			gSubDropdownbox.appendChild(dropdownRightButton)
-			gSubDropdownbox.insertBefore(dropdownBoxShape, dropdownRightButton)
-			gSubDropdownbox.appendChild(dropdownBoxInnerTexta)
-			gSubDropdownbox.appendChild(dropdownBoxInnerTextb)
-			gSubDropdownbox.appendChild(dropdownBoxShapeAfter)
-
-
-			// [6][0]
 			gSubDropdownbox1.appendChild(dropdownRightButton1)
+			gSubDropdownbox.insertBefore(dropdownBoxShape, dropdownRightButton)
 			gSubDropdownbox1.insertBefore(dropdownBoxShape1, dropdownRightButton1)
-			gSubDropdownbox1.appendChild(dropdownBoxInnerText1a)
-			gSubDropdownbox1.appendChild(dropdownBoxInnerText1b)
+			gSubDropdownbox.appendChild(dropdownBoxInnerText)
+			gSubDropdownbox1.appendChild(dropdownBoxInnerText1)
+			gSubDropdownbox.appendChild(dropdownBoxShapeAfter)
 			gSubDropdownbox1.appendChild(dropdownBoxShape1After)
-
-			// [7]
 			gSubDropdown.appendChild(gSubDropdownbox)
 			gSubDropdown.appendChild(gSubDropdownboxPop)
 
-			// [6]
 			gSubDropdown1.appendChild(gSubDropdownbox1)
 			gSubDropdown1.appendChild(gSubDropdownbox1Pop)
-
 			g.appendChild(icon);
 			g.appendChild(moreIcon);
 			g.appendChild(gRightPop3)
-			// dropdown part
 			g.appendChild(gDropdown)
-			// subdropdown part
-			g.appendChild(gSubDropdown1)  // [6] 下方
-			g.appendChild(gSubDropdown)  // [7] 上方
-
+			g.appendChild(gSubDropdown1)
+			g.appendChild(gSubDropdown)
+			g.appendChild(gRightPop3Reminder);
 			const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
 			const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
 			const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
@@ -3117,7 +3186,7 @@
 			}
 		}
 		onEnd(interrupt) {
-			console.log(2428, this.pressedStepComponent)
+			//console.log(2428, this.pressedStepComponent)
 			if (!interrupt) {
 				this.context.setSelectedStep(this.pressedStepComponent.step);
 			}
@@ -3168,17 +3237,14 @@
 			parent.appendChild(g);
 			const sequenceComponent = SequenceComponent.create(g, sequence, configuration);
 			const view = sequenceComponent.view;
-			let startCircle;
-			if (sequence.length == 0){
-				startCircle = createCircle(g, view.joinX -  SIZE/3, 0, "Click here to choose your trigger");
-			} else if (sequence[0].id != 'start-component'){
-				startCircle = createCircle(g, view.joinX - SIZE/3, 0, "Click here to choose your trigger");
-			} else {
-				startCircle = createCircle(g, view.joinX - SIZE/3, 0, " ");
-			}
-			// Dom.translate(startCircle, view.joinX - SIZE / 2, 0);
+			const startCircle = createCircle(true);
+			Dom.translate(startCircle, view.joinX - SIZE / 2, 0);
 			g.appendChild(startCircle);
 			Dom.translate(view.g, 0, SIZE);
+
+			// const endCircle = createCircle(false);
+			// Dom.translate(endCircle, view.joinX - SIZE / 2, SIZE + view.height);
+			// g.appendChild(endCircle);
 			return new StartComponentView(g, view.width, view.height + SIZE * 2, view.joinX, sequenceComponent);
 		}
 		getClientPosition() {
@@ -3189,40 +3255,25 @@
 			(_a = this.g.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(this.g);
 		}
 	}
-	const LABEL_HEIGHT$1 = 40;
-	function createCircle(parent, x, y, text) {
-		let g = Dom.svg("g", {
-			class: "sqd-start",
-			id: 'start'
+	function createCircle(isStart) {
+		const circle = Dom.svg('circle', {
+			class: 'sqd-start-stop',
+			cx: SIZE / 2,
+			cy: SIZE / 2,
+			r: SIZE / 2
 		});
-		parent.appendChild(g);
-		if (text == " "){
-			Dom.attrs(g, {
-				visibility: "hidden"
+		const g = Dom.svg('g');
+		g.appendChild(circle);
+		const s = SIZE * 0.5;
+		const m = (SIZE - s) / 2;
+		if (isStart) {
+			const start = Dom.svg('path', {
+				class: 'sqd-start-stop-icon',
+				transform: `translate(${m}, ${m})`,
+				d: `M ${s * 0.2} 0 L ${s} ${s / 2} L ${s * 0.2} ${s} Z`
 			});
-			// return g;
-		}
-
-		const nameText = Dom.svg('text', {
-			class: 'sqd-label-text',
-			x,
-			y: y + LABEL_HEIGHT$1 / 2
-		});
-		nameText.textContent = text;
-		g.appendChild(nameText);
-		const nameWidth = Math.max(g.getBBox().width + LABEL_PADDING_X * 2, MIN_LABEL_WIDTH);
-		const nameRect = Dom.svg('rect', {
-			class: 'sqd-label-rect',
-			width: nameWidth,
-			height: LABEL_HEIGHT$1,
-			x: x - nameWidth / 2,
-			y,
-			rx: 10,
-			ry: 10
-		});
-
-		g.insertBefore(nameRect, nameText);
-
+			g.appendChild(start);
+		} 
 		return g;
 	}
 
@@ -3349,129 +3400,12 @@
 					fill: `url(#${gridPatternId})`
 				})
 			);
-
-			// Add title box
-			// Add title box
-			const info = Dom.svg('svg',{
-				class: "info-box",
-				width: 200,
-				height: 40
-			});
-			const rect = Dom.svg('rect', {
-				class: 'info-box-rect',
-				width: 200,
-				height: 40,
-				rx: 20,
-				ry: 20
-			});
-			const title = Dom.svg('text', {
-				x: 90,
-				y: 25,
-				class: 'info-box-title'
-			});
-			title.textContent = "TEST";
-
-			// console.log(parent);
-			const dialogBox = Dom.element('div', {
-				class: 'info-box-prompt',
-			});
-			const dialogForm = Dom.element('form', {
-				class: 'info-box-prompt'
-			});
-			const txt = Dom.element('input', {
-				class: 'info-box-prompt-input',
-				type: 'text',
-				name: 'title',
-				placeholder: title.textContent,
-			});
-			dialogForm.appendChild(txt);
-			txt.insertAdjacentHTML("afterend", "</br>");
-			const btn = Dom.element('input', {
-				class: 'info-box-prompt-btn',
-				type: 'submit',
-			});
-			btn.addEventListener('click', function(e) {
-				e.preventDefault();
-				title.textContent = txt.value;
-				Dom.toggleClass(dialogBox, 1, 'sqd-hidden');
-			});
-			dialogForm.appendChild(btn);
-			dialogBox.appendChild(dialogForm);
-			Dom.toggleClass(dialogBox, 1, 'sqd-hidden');
-
-			info.addEventListener('click', function (){
-				Dom.toggleClass(dialogBox, 0, 'sqd-hidden');
-			});
-
-			info.appendChild(title);
-			info.insertBefore(rect, title);
-
-
 			canvas.appendChild(foreground);
 			workspace.appendChild(canvas);
-			workspace.appendChild(info);
 			parent.appendChild(workspace);
-			parent.appendChild(dialogBox);
 			const view = new WorkspaceView(workspace, canvas, gridPattern, gridPatternPath, foreground, configuration);
 			window.addEventListener('resize', view.onResizeHandler, false);
 			return view;
-		}
-		editStartComp(sequence){
-			const start = document.getElementById('start');;
-			// console.log(document.getElementsByClassName('start-component')[0])
-			start.addEventListener('click', e => {
-				e.preventDefault();
-				const dialogBox = Dom.element('dialog',{
-					class: 'triggers-list'
-				});
-				const triggers = ['Subscribe to a list', 'Unsubscribe from a list', 'Place a purchase', 
-					'Abandon checkout', 'Time trigger'];
-				const types = ['Subscribe', 'Unsubscribe', 'Purchase', 'Abandon','Time Trigger'];
-
-				const dialogForm = Dom.element('form',{
-					// class: 'triggers-list',
-					method: 'dialog'
-				});
-			
-				for (let i = 0; i < triggers.length; i++) {
-					const btn1 = Dom.element('button');
-					Dom.attrs(btn1, {
-						class: "triggers",
-						type: "submit",
-						name: "userChoice",
-						value: i
-					});
-					
-					btn1.innerText = triggers[i];
-					btn1.addEventListener(
-						'click',
-						e => {
-							e.preventDefault();
-							sequence.unshift({
-								id: "start-component",
-								componentType: 'task',
-								type: 'save',	// temporary type name 
-								name: triggers[e.target.value],
-								properties: {}
-							});
-							
-							this.render(sequence);
-							dialogBox.close();
-						},
-					);
-					dialogForm.appendChild(btn1);
-					btn1.insertAdjacentHTML("afterend", "</br>");
-				}
-				dialogBox.appendChild(dialogForm);
-				// const root = document.getElementById("first-step");
-				start.appendChild(dialogBox);
-				
-				try {
-					dialogBox.showModal();
-				} catch(error) {
-					console.log(error);
-				}	
-			});
 		}
 		// Render whole page
 		render(sequence) {
@@ -3479,7 +3413,6 @@
 				this.rootComponent.view.destroy();
 			}
 			this.rootComponent = StartComponent.create(this.foreground, sequence, this.configuration);
-			this.editStartComp(sequence);
 			this.refreshSize();
 		}
 		setPositionAndScale(position, scale) {
@@ -3641,17 +3574,11 @@
 			e.preventDefault();
 		}
 		startBehavior(target, position, forceMoveMode) {
-			// Update journey name in output json
-			const title = document.getElementsByClassName("info-box-title")[0];
-			this.context.definition.properties.journeyName = title.textContent;
-
 			const clickedStep = !forceMoveMode && !this.context.isMoveModeEnabled ? this.getRootComponent().findByElement(target) : null;
 			if (clickedStep) {
 				this.context.behaviorController.start(position, SelectStepBehavior.create(clickedStep, this.context));
 				const fakeThis = this.context 
-				console.log(3516, clickedStep.view.g.childNodes)
-
-				//switch step pop(if else block)
+				//switch step pop
 				if(clickedStep.step.componentType === 'switch'){
 					//click right popout
 					if(clickedStep.view.g.childNodes[13].childNodes[3].id){
@@ -3683,10 +3610,9 @@
 							clickedStep.view.g.childNodes[17].classList.toggle('sqd-hidden');
 						}
 					}
-
-					//show subdropdown
-					if(clickedStep.view.g.childNodes[17].childNodes[1]){
-						const dropdownButId = clickedStep.view.g.childNodes[17].childNodes[0].childNodes[4].id.toString();
+					//subdropdown
+					if(clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].id){
+						const dropdownButId = clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].id.toString();
 						const dropdownBut = document.getElementById(dropdownButId);
 						dropdownBut.onclick = function(e){
 							console.log(3498, clickedStep.view.g.childNodes[17].childNodes)
@@ -3694,91 +3620,13 @@
 							clickedStep.view.g.childNodes[17].childNodes[1].classList.toggle('sqd-hidden');
 						}
 					}
-					//set subdropdown
-					if(clickedStep.view.g.childNodes[17].childNodes[1]){
-						// select Once
-						const subDropdownBtnpopIda = clickedStep.view.g.childNodes[17].childNodes[1].childNodes[2].id.toString();
-						const subDropdownBtnpopa = document.getElementById(subDropdownBtnpopIda);
-						subDropdownBtnpopa.onclick = function(){
-							console.log(3296, 'clicked Any List', clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].classList)
-							if(clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].classList.length > 1){  // has 'sqd-hidden' in class
-								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
-							} 
-							else{
-								// add 'sqd-hidden' for [17][0][3] default text
-								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].classList.add("sqd-hidden");
-								console.log(3303, 'sqd-hidden added', clickedStep.view.g.childNodes[17].childNodes[0].childNodes);
-								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
-							}
-							
-						}
-					}
-					//set subdropdown
-					if(clickedStep.view.g.childNodes[17].childNodes[1]){
-						// select Multiple T
-						const subDropdownBtnpopIdb = clickedStep.view.g.childNodes[17].childNodes[1].childNodes[5].id.toString();
-						const subDropdownBtnpopb = document.getElementById(subDropdownBtnpopIdb);
-						subDropdownBtnpopb.onclick = function(){
-							console.log(3329, 'clicked List A', clickedStep.view.g.childNodes[17].childNodes[0].childNodes[2].classList)
-							if(clickedStep.view.g.childNodes[17].childNodes[0].childNodes[2].classList.length > 1){  // has 'sqd-hidden' in class
-								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
-							} 
-							else{
-								// add 'sqd-hidden' for [17][0][2] default text
-								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[2].classList.add("sqd-hidden");
-								console.log(3340, 'sqd-hidden added', clickedStep.view.g.childNodes[17].childNodes[0].childNodes);
-								clickedStep.view.g.childNodes[17].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
-							}
-							
-						}
-					}
-
-					//show subdropdown1
-					if(clickedStep.view.g.childNodes[16].childNodes[1]){
-						const dropdownButId = clickedStep.view.g.childNodes[16].childNodes[0].childNodes[4].id.toString();
+					if(clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].id){
+						const dropdownButId = clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].id.toString();
 						const dropdownBut = document.getElementById(dropdownButId);
 						dropdownBut.onclick = function(e){
 							console.log(3498, clickedStep.view.g.childNodes[16].childNodes)
 							e.stopPropagation();
 							clickedStep.view.g.childNodes[16].childNodes[1].classList.toggle('sqd-hidden');
-						}
-					}
-					//set subdropdown1
-					if(clickedStep.view.g.childNodes[16].childNodes[1]){
-						// select Once
-						const subDropdownBtnpopId1a = clickedStep.view.g.childNodes[16].childNodes[1].childNodes[2].id.toString();
-						const subDropdownBtnpop1a = document.getElementById(subDropdownBtnpopId1a);
-						subDropdownBtnpop1a.onclick = function(){
-							console.log(3303, 'clicked Once', clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].classList)
-							if(clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].classList.length > 1){  // has 'sqd-hidden' in class
-								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
-							} 
-							else{
-								// add 'sqd-hidden' for [16][0][3] default text
-								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].classList.add("sqd-hidden");
-								console.log(3322, 'sqd-hidden added', clickedStep.view.g.childNodes[16].childNodes[0].childNodes);
-								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
-							}
-							
-						}
-					}
-					//set subdropdown1
-					if(clickedStep.view.g.childNodes[16].childNodes[1]){
-						// select Multiple T
-						const subDropdownBtnpopId1b = clickedStep.view.g.childNodes[16].childNodes[1].childNodes[5].id.toString();
-						const subDropdownBtnpop1b = document.getElementById(subDropdownBtnpopId1b);
-						subDropdownBtnpop1b.onclick = function(){
-							console.log(3329, 'clicked Multiple T', clickedStep.view.g.childNodes[16].childNodes[0].childNodes[2].classList)
-							if(clickedStep.view.g.childNodes[16].childNodes[0].childNodes[2].classList.length > 1){  // has 'sqd-hidden' in class
-								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
-							} 
-							else{
-								// add 'sqd-hidden' for [16][0][2] default text
-								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[2].classList.add("sqd-hidden");
-								console.log(3340, 'sqd-hidden added', clickedStep.view.g.childNodes[16].childNodes[0].childNodes);
-								clickedStep.view.g.childNodes[16].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
-							}
-							
 						}
 					}
 				}
@@ -3791,27 +3639,43 @@
 				
 				if(clickedStep.step.componentType === 'task'){
 					//right popout delete button
-					console.log(3577, clickedStep.view.g.childNodes);
 					if(clickedStep.view.g.childNodes[4].childNodes[1]){
 						const deleteButtonId = clickedStep.view.g.childNodes[4].childNodes[1].id.toString();
 						const deleteButton = document.getElementById(deleteButtonId)
+						//add mouseover event
+						deleteButton.addEventListener('mouseover', function() {
+							//console.log(3646, 'mouseover')
+							clickedStep.view.g.childNodes[8].childNodes[2].classList.remove('sqd-hidden');
+						})
+						deleteButton.addEventListener('mouseout', function() {
+							//console.log(3650, 'mouseout')
+							clickedStep.view.g.childNodes[8].childNodes[2].classList.add('sqd-hidden');
+						})
 						deleteButton.onclick = function(){
 								fakeThis.tryDeleteStep(clickedStep.step, 2);
 						}
+						
 					}
 					//click right popout
 					if(clickedStep.view.g.childNodes[3]){
 							const moreid = clickedStep.view.g.childNodes[3].id.toString();
 							const but = document.getElementById(moreid)
 							but.onclick = function(){
-								console.log(3542, clickedStep.view.g.childNodes[4])
+								//console.log(3542, clickedStep.view.g.childNodes[4])
 								clickedStep.view.g.childNodes[4].classList.toggle('sqd-hidden');
 							}
 						}
 					//show dropdown
 					if(clickedStep.view.g.childNodes[4].childNodes[2].id){
 						const dropdownButId = clickedStep.view.g.childNodes[4].childNodes[2].id.toString();
+						//add mouseover event
 						const dropdownBut = document.getElementById(dropdownButId);
+						dropdownBut.addEventListener('mouseover', function() {
+							clickedStep.view.g.childNodes[8].childNodes[0].classList.remove('sqd-hidden');
+						})
+						dropdownBut.addEventListener('mouseout', function() {
+							clickedStep.view.g.childNodes[8].childNodes[0].classList.add('sqd-hidden');
+						})
 						dropdownBut.onclick = function(e){
 							e.stopPropagation();
 							console.log(3551, clickedStep.view.g.childNodes)
@@ -3820,102 +3684,73 @@
 							clickedStep.view.g.childNodes[7].classList.toggle('sqd-hidden');
 						}
 					}
-
 					//show subdropdown
 					if(clickedStep.view.g.childNodes[7].childNodes[1]){
-						const subDropdownButtonId = clickedStep.view.g.childNodes[7].childNodes[0].childNodes[4].id.toString();
+						const subDropdownButtonId = clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].id.toString();
 						const subDropdownButton = document.getElementById(subDropdownButtonId);
 						subDropdownButton.onclick = function(){
 							console.log(3562, clickedStep.view.g.childNodes[7])
 							clickedStep.view.g.childNodes[7].childNodes[1].classList.toggle('sqd-hidden');
 						}
 					}
-					//set subdropdown
-					if(clickedStep.view.g.childNodes[7].childNodes[1]){
-						// select Once
-						const subDropdownBtnpopIda = clickedStep.view.g.childNodes[7].childNodes[1].childNodes[2].id.toString();
-						const subDropdownBtnpopa = document.getElementById(subDropdownBtnpopIda);
-						subDropdownBtnpopa.onclick = function(){
-							console.log(3296, 'clicked Any List', clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].classList)
-							if(clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].classList.length > 1){  // has 'sqd-hidden' in class
-								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
-							} 
-							else{
-								// add 'sqd-hidden' for [7][0][3] default text
-								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].classList.add("sqd-hidden");
-								console.log(3303, 'sqd-hidden added', clickedStep.view.g.childNodes[7].childNodes[0].childNodes);
-								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
-							}
-							
-						}
-					}
-					//set subdropdown
-					if(clickedStep.view.g.childNodes[7].childNodes[1]){
-						// select Multiple T
-						const subDropdownBtnpopIdb = clickedStep.view.g.childNodes[7].childNodes[1].childNodes[5].id.toString();
-						const subDropdownBtnpopb = document.getElementById(subDropdownBtnpopIdb);
-						subDropdownBtnpopb.onclick = function(){
-							console.log(3329, 'clicked List A', clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList)
-							if(clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList.length > 1){  // has 'sqd-hidden' in class
-								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
-							} 
-							else{
-								// add 'sqd-hidden' for [7][0][2] default text
-								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].classList.add("sqd-hidden");
-								console.log(3340, 'sqd-hidden added', clickedStep.view.g.childNodes[7].childNodes[0].childNodes);
-								clickedStep.view.g.childNodes[7].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
-							}
-							
-						}
-					}
-
 					//show subdropdown1
 					if(clickedStep.view.g.childNodes[6].childNodes[1]){
-						const subDropdownButtonId1 = clickedStep.view.g.childNodes[6].childNodes[0].childNodes[4].id.toString();
+						const subDropdownButtonId1 = clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].id.toString();
 						const subDropdownButton1 = document.getElementById(subDropdownButtonId1);
 						subDropdownButton1.onclick = function(){
 							clickedStep.view.g.childNodes[6].childNodes[1].classList.toggle('sqd-hidden');
 						}	
 
 					}
-					//set subdropdown1
-					if(clickedStep.view.g.childNodes[6].childNodes[1]){
-						// select Once
-						const subDropdownBtnpopId1a = clickedStep.view.g.childNodes[6].childNodes[1].childNodes[2].id.toString();
-						const subDropdownBtnpop1a = document.getElementById(subDropdownBtnpopId1a);
-						subDropdownBtnpop1a.onclick = function(){
-							console.log(3303, 'clicked Once', clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].classList)
-							if(clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].classList.length > 1){  // has 'sqd-hidden' in class
-								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
-							} 
-							else{
-								// add 'sqd-hidden' for [6][0][3] default text
-								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].classList.add("sqd-hidden");
-								console.log(3322, 'sqd-hidden added', clickedStep.view.g.childNodes[6].childNodes[0].childNodes);
-								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList.toggle('sqd-hidden');
-							}
-							
-						}
+					//upper subdropdown
+					const selectRunUpperId = clickedStep.view.g.childNodes[7].childNodes[1].childNodes[2].id.toString()
+					const selectRunUpper  = document.getElementById(selectRunUpperId);
+					selectRunUpper.onclick = function() {
+						console.log(3589, clickedStep)
+						const showVal = clickedStep.view.g.childNodes[7].childNodes[1].childNodes[1].innerHTML
+						clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].textContent = showVal
+						clickedStep.view.g.childNodes[7].childNodes[1].classList.toggle('sqd-hidden');
+						clickedStep.step.properties['Select List'] = showVal
 					}
-					//set subdropdown1
-					if(clickedStep.view.g.childNodes[6].childNodes[1]){
-						// select Multiple T
-						const subDropdownBtnpopId1b = clickedStep.view.g.childNodes[6].childNodes[1].childNodes[5].id.toString();
-						const subDropdownBtnpop1b = document.getElementById(subDropdownBtnpopId1b);
-						subDropdownBtnpop1b.onclick = function(){
-							console.log(3329, 'clicked Multiple T', clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList)
-							if(clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList.length > 1){  // has 'sqd-hidden' in class
-								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
-							} 
-							else{
-								// add 'sqd-hidden' for [6][0][2] default text
-								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].classList.add("sqd-hidden");
-								console.log(3340, 'sqd-hidden added', clickedStep.view.g.childNodes[6].childNodes[0].childNodes);
-								clickedStep.view.g.childNodes[6].childNodes[0].childNodes[3].classList.toggle('sqd-hidden');
-							}
-							
-						}
+					const selectRunUpperId1 = clickedStep.view.g.childNodes[7].childNodes[1].childNodes[5].id.toString()
+					const selectRunUpper1  = document.getElementById(selectRunUpperId1);
+					selectRunUpper1.onclick = function() {
+						
+						const showVal = clickedStep.view.g.childNodes[7].childNodes[1].childNodes[4].innerHTML
+
+						console.log(3589,showVal)
+						clickedStep.view.g.childNodes[7].childNodes[0].childNodes[2].textContent = showVal
+						clickedStep.view.g.childNodes[7].childNodes[1].classList.toggle('sqd-hidden');
+						clickedStep.step.properties['Select List'] = showVal
 					}
+
+
+
+
+
+					//lower subdropdown
+					const selectRunLowerId = clickedStep.view.g.childNodes[6].childNodes[1].childNodes[2].id.toString()
+					const selectRunLower  = document.getElementById(selectRunLowerId);
+					selectRunLower.onclick = function() {
+						//console.log(3589, clickedStep.view.g.childNodes)
+						const showVal = clickedStep.view.g.childNodes[6].childNodes[1].childNodes[1].innerHTML
+						clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].textContent = showVal
+						clickedStep.view.g.childNodes[6].childNodes[1].classList.toggle('sqd-hidden');
+						clickedStep.step.properties['Run'] = showVal
+					}
+					const selectRunLowerId1 = clickedStep.view.g.childNodes[6].childNodes[1].childNodes[5].id.toString()
+					const selectRunLower1  = document.getElementById(selectRunLowerId1);
+					selectRunLower1.onclick = function() {
+						//console.log(3589, )
+						const showVal = clickedStep.view.g.childNodes[6].childNodes[1].childNodes[4].innerHTML
+						console.log(3596, clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2])
+						clickedStep.view.g.childNodes[6].childNodes[0].childNodes[2].textContent = showVal
+						clickedStep.view.g.childNodes[6].childNodes[1].classList.toggle('sqd-hidden');
+						clickedStep.step.properties['Run'] = showVal
+					}
+
+
+
 				}
 			} else {
 				console.log(3577, this)
@@ -3975,7 +3810,7 @@
 					throw new Error(`Cannot find a step component by id ${step.id}`);
 				}
 				this.selectedStepComponent.setState(StepComponentState.selected);
-				const clickedStep = !this.context.isMoveModeEnabled ? this.getRootComponent().findByElement(this.position) : null;
+				console.log(3811, this.selectedStepComponent)
 			}
 		}
 		getRootComponent() {
@@ -4164,11 +3999,11 @@
 			console.log("delete from keyup");
 			/* const c = promtChoices(this.context);
 			this.context.tryDeleteStep(this.context.selectedStep, c); */
-			if (this.context.selectedStep.componentType == 'switch'){
-				promptChoices(this.context);
-			}
-			else {
-				this.context.tryDeleteStep(this.context.selectedStep, 2);
+			let arr = this.context.tryDeleteStep(this.context.selectedStep);
+			if (arr[0].componentType == 'switch'){
+				promptChoices(this.context, arr[0], arr[1]); 
+			} else {
+				SequenceModifier.deleteStep(arr[0], arr[1], 2); 
 			}
 		}
 	}
