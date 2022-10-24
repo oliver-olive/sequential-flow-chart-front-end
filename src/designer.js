@@ -2249,6 +2249,110 @@
 			const gRightPop3 = Dom.svg('g', {
 				class: `sqd-task-group right-popup sqd-hidden Collapsed`
 			});
+			const gRightPop3Reminder = Dom.svg('g', {
+				class: `sqd-task-group right-popup-reminder`
+			});
+			const gRightPop3Reminder1 = Dom.svg('g', {
+				class: `sqd-task-group right-popup-reminder sqd-hidden`
+			});
+			const gRightPop3Reminder2 = Dom.svg('g', {
+				class: `sqd-task-group right-popup-reminder sqd-hidden`
+			});
+			const gRightPop3Reminder3 = Dom.svg('g', {
+				class: `sqd-task-group right-popup-reminder sqd-hidden`
+			});
+			const reminder1 = Dom.svg('rect', {
+				x: 0.5,
+				y: 0.5,
+				class: 'sqd-task-rect',
+				width: 50,
+				height: 25,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			Dom.attrs(reminder1, {
+				id: `reminder1${Date.now()}`,
+				x: ICON_SIZE + 3 * PADDING_X + textWidth + 62,
+				y: PADDING_Y - 35,
+			}
+			)
+			const reminderText1 = Dom.svg('text', {
+				class: 'sqd-task-text',
+						x: ICON_SIZE + 3 * PADDING_X + textWidth + 62 + 12.5,
+						y: PADDING_Y - 23,
+					});
+				Dom.attrs(reminderText1, {
+						//class: 'sqd-hidden',
+						id:`reminderText${Date.now()}`
+					})
+			reminderText1.textContent = "Edit"
+			const reminder2 = Dom.svg('rect', {
+				x: 0.5,
+				y: 0.5,
+				class: 'sqd-task-rect',
+				width: 50,
+				height: 25,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			Dom.attrs(reminder2, {
+				id: `reminder2${Date.now()}`,
+				x: ICON_SIZE + 3 * PADDING_X + textWidth + 80,
+				y: PADDING_Y,
+			}
+			)
+
+			const reminderText2 = Dom.svg('text', {
+				class: 'sqd-task-text',
+						x: ICON_SIZE + 3 * PADDING_X + textWidth + 80 + 10,
+						y: PADDING_Y + 12,
+					});
+				Dom.attrs(reminderText2, {
+						//class: 'sqd-hidden',
+						id:`reminderText2${Date.now()}`
+					})
+			reminderText2.textContent = "Copy"
+			const reminder3 = Dom.svg('rect', {
+				x: 0.5,
+				y: 0.5,
+				class: 'sqd-task-rect',
+				width: 50,
+				height: 25,
+				rx: RECT_RADIUS,
+				ry: RECT_RADIUS
+			});
+			Dom.attrs(reminder3, {
+				id: `reminder3${Date.now()}`,
+				x: ICON_SIZE + 3 * PADDING_X + textWidth + 62,
+				y: PADDING_Y + 35,
+			}
+			)
+
+			const reminderText3 = Dom.svg('text', {
+				class: 'sqd-task-text',
+						x: ICON_SIZE + 3 * PADDING_X + textWidth + 62 + 7,
+						y: PADDING_Y + 47,
+					});
+				Dom.attrs(reminderText3, {
+						//class: 'sqd-hidden',
+						id:`reminderText3${Date.now()}`
+					})
+			reminderText3.textContent = "Delete"
+			gRightPop3Reminder1.appendChild(reminderText1)
+			gRightPop3Reminder1.insertBefore(reminder1, reminderText1)
+			gRightPop3Reminder2.appendChild(reminderText2)
+			gRightPop3Reminder2.insertBefore(reminder2, reminderText2)
+			gRightPop3Reminder3.appendChild(reminderText3)
+			gRightPop3Reminder3.insertBefore(reminder3, reminderText3)
+			gRightPop3Reminder.appendChild(gRightPop3Reminder1)
+			gRightPop3Reminder.appendChild(gRightPop3Reminder2)
+			gRightPop3Reminder.appendChild(gRightPop3Reminder3)
+
+
+
+
+
+
 			gRightPop3.appendChild(icon1)
 			gRightPop3.appendChild(icon2)
 			gRightPop3.appendChild(icon3)
@@ -2552,6 +2656,7 @@
 			g.appendChild(gDropdown)
 			g.appendChild(gSubDropdown1)
 			g.appendChild(gSubDropdown)
+			g.appendChild(gRightPop3Reminder);
 			const inputView = InputView.createRoundInput(g, boxWidth / 2, 0);
 			const outputView = OutputView.create(g, boxWidth / 2, boxHeight);
 			const validationErrorView = ValidationErrorView.create(g, boxWidth, 0);
@@ -3081,7 +3186,7 @@
 			}
 		}
 		onEnd(interrupt) {
-			console.log(2428, this.pressedStepComponent)
+			//console.log(2428, this.pressedStepComponent)
 			if (!interrupt) {
 				this.context.setSelectedStep(this.pressedStepComponent.step);
 			}
@@ -3537,16 +3642,25 @@
 					if(clickedStep.view.g.childNodes[4].childNodes[1]){
 						const deleteButtonId = clickedStep.view.g.childNodes[4].childNodes[1].id.toString();
 						const deleteButton = document.getElementById(deleteButtonId)
+						deleteButton.addEventListener('mouseover', function() {
+							//console.log(3646, 'mouseover')
+							clickedStep.view.g.childNodes[8].childNodes[2].classList.remove('sqd-hidden');
+						})
+						deleteButton.addEventListener('mouseout', function() {
+							//console.log(3650, 'mouseout')
+							clickedStep.view.g.childNodes[8].childNodes[2].classList.add('sqd-hidden');
+						})
 						deleteButton.onclick = function(){
 								fakeThis.tryDeleteStep(clickedStep.step, 2);
 						}
+						
 					}
 					//click right popout
 					if(clickedStep.view.g.childNodes[3]){
 							const moreid = clickedStep.view.g.childNodes[3].id.toString();
 							const but = document.getElementById(moreid)
 							but.onclick = function(){
-								console.log(3542, clickedStep.view.g.childNodes[4])
+								//console.log(3542, clickedStep.view.g.childNodes[4])
 								clickedStep.view.g.childNodes[4].classList.toggle('sqd-hidden');
 							}
 						}
@@ -3554,6 +3668,12 @@
 					if(clickedStep.view.g.childNodes[4].childNodes[2].id){
 						const dropdownButId = clickedStep.view.g.childNodes[4].childNodes[2].id.toString();
 						const dropdownBut = document.getElementById(dropdownButId);
+						dropdownBut.addEventListener('mouseover', function() {
+							clickedStep.view.g.childNodes[8].childNodes[0].classList.remove('sqd-hidden');
+						})
+						dropdownBut.addEventListener('mouseout', function() {
+							clickedStep.view.g.childNodes[8].childNodes[0].classList.add('sqd-hidden');
+						})
 						dropdownBut.onclick = function(e){
 							e.stopPropagation();
 							console.log(3551, clickedStep.view.g.childNodes)
@@ -3688,7 +3808,7 @@
 					throw new Error(`Cannot find a step component by id ${step.id}`);
 				}
 				this.selectedStepComponent.setState(StepComponentState.selected);
-				const clickedStep = !this.context.isMoveModeEnabled ? this.getRootComponent().findByElement(this.position) : null;
+				console.log(3811, this.selectedStepComponent)
 			}
 		}
 		getRootComponent() {
